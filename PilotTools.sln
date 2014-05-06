@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AviationMath", "Libraries\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherData", "Libraries\WeatherData\WeatherData.csproj", "{6C770D4A-ECBE-4A7E-93D3-C870BADCE92E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6B00E08-0D2F-4129-84F2-1765FD9ABDB3}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\RunwayTests.cs = Tests\RunwayTests.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PilotTools\PilotTools.Shared\PilotTools.Shared.projitems*{309d5485-f785-46fe-a132-c2886b4921e3}*SharedItemsImports = 13

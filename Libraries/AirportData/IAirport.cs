@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace AirportData
 {
     public interface IAirport
     {
         int Id { get; set; }
-        int Elevation { get; set; }
+
         Dictionary<RadioFrequencyType, double> Frequencies { get; set; }
 
         string ICAO { get; set; }
@@ -17,8 +18,7 @@ namespace AirportData
 
         string Name { get; set; }
 
-        double Latitude { get; set; }
-        double Longitude { get; set; }
+        BasicGeoposition Position { get; set; }
 
         IEnumerable<IRunway> Runways { get; set; }
 

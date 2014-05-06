@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace AirportData
 {
@@ -11,10 +12,8 @@ namespace AirportData
         public int Identifier;
         public int Heading;
 
-        public double Latitude;
-        public double Longitude;
-        public int Elevation;
-
+        public BasicGeoposition Position;
+        
         public int DisplacedThreshold;
     }
 }

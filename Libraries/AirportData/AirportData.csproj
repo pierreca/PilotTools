@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
-    <TargetPlatform Include="Windows, Version=8.1" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="IAirport.cs" />
     <Compile Include="OurAirports\Airport.cs" />
     <Compile Include="AirportDirectoryException.cs" />
@@ -50,11 +46,21 @@
     <Compile Include="RunwayEnd.cs" />
   </ItemGroup>
   <ItemGroup>
+    <TargetPlatform Include="Windows, Version=8.1" />
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AviationMath\AviationMath.csproj">
+      <Project>{84a34c96-0d0b-4a01-bf34-e364c2809cef}</Project>
+      <Name>AviationMath</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="PCLStorage">
-      <HintPath>..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
+      <HintPath>..\..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
     </Reference>
     <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

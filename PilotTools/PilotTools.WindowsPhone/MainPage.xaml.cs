@@ -1,8 +1,11 @@
-﻿using System;
+﻿using AirportData;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +25,13 @@ namespace PilotTools
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        IAirportDirectory directory;
+
         public MainPage()
         {
             this.InitializeComponent();
+            
+            directory = new AirportData.OurAirports.AirportDirectory();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
@@ -43,6 +50,38 @@ namespace PilotTools
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+        }
+
+        private async void btnDownload_Click(object sender, RoutedEventArgs e)
+        {
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            await directory.DownloadAndSaveAsync();
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private async void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            await directory.LoadAsync();
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void btnLookup_Click(object sender, RoutedEventArgs e)
+        {
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            try
+            {
+                var airport = directory.GetAirportData(tbLookup.Text);
+
+                map.Center = new Geopoint(airport.Position);
+                map.ZoomLevel = 14;
+            }
+            catch(AirportDirectoryException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            this.progress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
     }
 }

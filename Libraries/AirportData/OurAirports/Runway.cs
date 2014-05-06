@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AviationMath;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace AirportData.OurAirports
 {
@@ -12,8 +14,11 @@ namespace AirportData.OurAirports
         public RunwayEnd End2 { get; set; }
 
         public int Id { get; set; }
+
         public int AirportId { get; set; }
+
         public int Length { get; set; }
+
         public int Width { get; set; }
 
         public bool Lighted { get; set; }
@@ -23,32 +28,72 @@ namespace AirportData.OurAirports
 
         public static IRunway CreateFromString(string s)
         {
-            var result = new Runway();
+            int id, airportId, length, width, identifier, threshold;
+            double lat, lng, alt;
 
             var fields = s.Split(',');
-            result.Id = int.Parse(fields[0]);
-            result.AirportId = int.Parse(fields[1]);
-            result.Length = int.Parse(fields[3]);
-            result.Width = int.Parse(fields[4]);
-            result.Surface = fields[5];
-            result.Lighted = (int.Parse(fields[6]) == 1);
-            result.Closed = (int.Parse(fields[7]) == 1);
+            int.TryParse(fields[0], out id);
+            int.TryParse(fields[1], out airportId);
+            int.TryParse(fields[3], out length);
+            int.TryParse(fields[4], out width);
 
-            result.End1 = new RunwayEnd();
-            result.End1.Identifier = int.Parse(fields[8]);
-            result.End1.Latitude = int.Parse(fields[9]);
-            result.End1.Longitude = int.Parse(fields[10]);
-            result.End1.Elevation = int.Parse(fields[11]);
-            result.End1.DisplacedThreshold = int.Parse(fields[12]);
+            var result = new Runway()
+                {
+                    Id = id,
+                    AirportId = airportId,
+                    Length = length,
+                    Width = width,
+                    Surface = fields[5].Trim('"'),
+                    Lighted = parseBool(fields[6]),
+                    Closed = parseBool(fields[7]),
+                };
 
-            result.End2 = new RunwayEnd();
-            result.End2.Identifier = int.Parse(fields[13]);
-            result.End2.Latitude = int.Parse(fields[14]);
-            result.End2.Longitude = int.Parse(fields[15]);
-            result.End2.Elevation = int.Parse(fields[16]);
-            result.End2.DisplacedThreshold = int.Parse(fields[17]);
+
+            int.TryParse(fields[8].Trim('"'), out identifier);
+            int.TryParse(fields[12].Trim('"'), out threshold);
+            double.TryParse(fields[9].Trim('"'), out lat);
+            double.TryParse(fields[10].Trim('"'), out lng);
+            double.TryParse(fields[11].Trim('"'), out alt);
+
+            result.End1 = new RunwayEnd()
+            {
+                Identifier = identifier,
+                DisplacedThreshold = threshold,
+                Position = new BasicGeoposition()
+                {
+                    Altitude = UnitConverter.FeetToMeters(alt),
+                    Latitude = lat,
+                    Longitude = lng
+                }
+            };
+
+            int.TryParse(fields[14].Trim('"'), out identifier);
+            int.TryParse(fields[18].Trim('"'), out threshold);
+            double.TryParse(fields[15].Trim('"'), out lat);
+            double.TryParse(fields[16].Trim('"'), out lng);
+            double.TryParse(fields[17].Trim('"'), out alt);
+
+            result.End2 = new RunwayEnd()
+            {
+                Identifier = identifier,
+                DisplacedThreshold = threshold,
+                Position = new BasicGeoposition()
+                {
+                    Altitude = UnitConverter.FeetToMeters(alt),
+                    Latitude = lat,
+                    Longitude = lng
+                }
+            };
 
             return result;
+        }
+
+        private static bool parseBool(string boolStr)
+        {
+                int tmp = int.MinValue;
+                int.TryParse(boolStr, out tmp);
+
+                return tmp == 1;
         }
     }
 }

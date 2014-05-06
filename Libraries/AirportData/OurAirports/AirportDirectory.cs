@@ -28,7 +28,7 @@ namespace AirportData.OurAirports
         /// <returns>An enumeration of airports.</returns>
         private IEnumerable<IAirport> ParseAirportData(Stream data)
         {
-            var newAirports = new List<Airport>(50000);
+            var newAirports = new List<IAirport>(50000);
 
             using (var sr = new StreamReader(data))
             {
@@ -49,26 +49,16 @@ namespace AirportData.OurAirports
             return newAirports;
         }
 
-        private void ParseRunwayData(Stream data)
+        private IEnumerable<IRunway> ParseRunwayData(Stream data)
         {
+            var newRunways = new List<IRunway>(50000);
             using (var sr = new StreamReader(data))
             {
                 while (!sr.EndOfStream)
                 {
                     try
                     {
-                        var newRunway = Runway.CreateFromString(sr.ReadLine());
-                        var potentialAirports = this.airports.Where(a => a.Id == newRunway.AirportId);
-                        if(potentialAirports != null && potentialAirports.Count() == 1)
-                        {
-                            var newRunwayList = potentialAirports.First().Runways.ToList();
-                            newRunwayList.Add(newRunway);
-                            potentialAirports.First().Runways = newRunwayList;
-                        }
-                        else
-                        {
-                            throw new AirportDirectoryException("Cannot find the airport corresponding to this runway");
-                        }
+                        newRunways.Add(Runway.CreateFromString(sr.ReadLine()));
                     }
                     catch (FormatException)
                     {
@@ -76,6 +66,8 @@ namespace AirportData.OurAirports
                     }
                 }
             }
+
+            return newRunways;
         }
 
         /// <summary>
@@ -122,20 +114,27 @@ namespace AirportData.OurAirports
         /// <returns>The airport corresponding to the ICAO code, or null if none has been found.</returns>
         public IAirport GetAirportData(string ICAO)
         {
+            IAirport airport;
             if (this.airports == null)
             {
                 throw new InvalidOperationException("Database of airports is empty!");
             }
 
-            var results = this.airports.Where(a => a.ICAO == ICAO);
+            var results = this.airports.Where(a => string.Compare(a.ICAO, ICAO, StringComparison.CurrentCultureIgnoreCase) == 0);
 
             if (results == null)
             {
                 return null;
             }
+            else if (results.Count() == 0)
+            {
+                throw new AirportDirectoryException("Airport not found");
+            }
             else if (results.Count() == 1)
             {
-                return results.First();
+                airport = results.First();
+                airport.Runways = this.runways.Where(r => r.AirportId == airport.Id);
+                return airport;
             }
             else
             {
@@ -160,7 +159,7 @@ namespace AirportData.OurAirports
             file = await folder.GetFileAsync(RunwaysFileName);
             using (var s = await file.OpenAsync(FileAccess.Read))
             {
-                this.ParseRunwayData(s);
+                this.runways = this.ParseRunwayData(s);
             }
         }
     }

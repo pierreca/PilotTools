@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace AirportData.OurAirports
 {
@@ -14,7 +15,7 @@ namespace AirportData.OurAirports
         }
 
         public int Id { get; set; }
-        public int Elevation { get; set; }
+
         public Dictionary<RadioFrequencyType, double> Frequencies { get; set; }
 
         public string ICAO { get; set; }
@@ -23,23 +24,34 @@ namespace AirportData.OurAirports
 
         public string Name { get; set; }
 
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public BasicGeoposition Position { get; set; }
 
         public IEnumerable<IRunway> Runways { get; set; }
 
-        public static Airport CreateFromString(string s)
+        public static IAirport CreateFromString(string s)
         {
-            var result = new Airport();
-            
+            int id, alt;
+            double lat, lng;
+
             var fields = s.Split(','); 
-            result.Id = int.Parse(fields[0]);
-            result.Latitude = double.Parse(fields[4]);
-            result.Longitude = double.Parse(fields[5]);
-            result.Elevation = int.Parse(fields[6]);
-            result.Name = fields[3];
-            result.ICAO = fields[12];
-            result.LocalCode = fields[14];
+            int.TryParse(fields[0], out id);
+            double.TryParse(fields[4], out lat);
+            double.TryParse(fields[5], out lng);
+            int.TryParse(fields[6], out alt);
+            
+            var result = new Airport()
+            {
+                Id = id,
+                Name = fields[3].Trim('"'),
+                ICAO = fields[12].Trim('"'),
+                LocalCode = fields[14].Trim('"'),
+                Position = new BasicGeoposition()
+                {
+                    Altitude = alt,
+                    Latitude = lat,
+                    Longitude = lng
+                }
+            };
 
             return result;
         }

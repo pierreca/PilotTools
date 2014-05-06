@@ -8,11 +8,9 @@ namespace AirportData
 {
     public class AirportDirectoryException : Exception
     {
-        string Message { get; set; }
-
         public AirportDirectoryException(string message)
-        {
-            this.Message = message;   
+            : base(message)
+        {  
         }
     }
 }
