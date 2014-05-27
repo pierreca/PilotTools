@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
+using AviationMath;
 
 namespace AirportData.OurAirports
 {
@@ -32,6 +34,7 @@ namespace AirportData.OurAirports
 
             using (var sr = new StreamReader(data))
             {
+                sr.ReadLine(); // drop the first line
                 while (!sr.EndOfStream)
                 {
                     try
@@ -140,6 +143,33 @@ namespace AirportData.OurAirports
             {
                 throw new AirportDirectoryException("Multiple airports with the same identifier: database is probably corrupt");
             }
+        }
+
+        /// <summary>
+        /// Gets a collection of airports within a circle around a position.
+        /// </summary>
+        /// <param name="position">Center of the circle.</param>
+        /// <param name="searchRadius">Radius of the circle in nautical miles.</param>
+        /// <returns>A collection of airports within this circle.</returns>
+        public async Task<IEnumerable<IAirport>> GetAirportsAroundAsync(BasicGeoposition position, int searchRadius)
+        {
+            if (this.airports == null)
+            {
+                throw new InvalidOperationException("Database of airports is empty!");
+            }
+
+            var results = await Task.Factory.StartNew<IEnumerable<IAirport>>(() => 
+                {
+                    var r = from a in this.airports
+                            let distance = a.Position.GetDistanceToNM(position)
+                            where a.IsPositionValid && distance < searchRadius && a.Type == AirportType.Airport
+                            orderby distance ascending
+                            select a;
+
+                    return r.ToList();
+                });
+            
+            return results;
         }
 
         /// <summary>

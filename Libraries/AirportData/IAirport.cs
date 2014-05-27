@@ -18,9 +18,12 @@ namespace AirportData
 
         string Name { get; set; }
 
+        bool IsPositionValid { get; set; }
+
         BasicGeoposition Position { get; set; }
 
         IEnumerable<IRunway> Runways { get; set; }
 
+        AirportType Type { get; set; }
     }
 }

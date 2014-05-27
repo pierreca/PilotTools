@@ -17,5 +17,10 @@ namespace AviationMath
         {
             return meters * 3.28084;
         }
+
+        public static double KilometersToNauticalMiles(double km)
+        {
+            return km * 0.539957;
+        }
     }
 }

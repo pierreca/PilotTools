@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="PilotTools.Views.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PilotTools.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - SETTINGS">
+        <PivotItem Header="database">
+            <Grid>
+                <ListBox x:Name="lbDataSources" 
+                         Background="Transparent"
+                         ItemsSource="{Binding SourceManager.Sources}"
+                         SelectionChanged="lbDataSources_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Name}"
+                                     Foreground="White"
+                                     FontSize="36" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </Grid>
+        </PivotItem>
+        <PivotItem Header="location">
+            <StackPanel>
+                <ToggleButton x:Name="tglLocationServices" Content="allow use of current location" />
+            </StackPanel>
+        </PivotItem>
+    </Pivot>
+</Page>

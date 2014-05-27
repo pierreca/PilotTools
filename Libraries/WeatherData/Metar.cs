@@ -8,5 +8,9 @@ namespace WeatherData
 {
     public class Metar
     {
+        public bool IsValid { get; set; }
+        public string Raw { get; set; }
+
+        public dynamic MetarObj { get; set; }
     }
 }

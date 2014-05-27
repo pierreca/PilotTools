@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
@@ -45,6 +42,32 @@
     <Compile Include="Metar.cs" />
     <Compile Include="MetarDecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Decoders\ENG.WMOCodes.Decoders.csproj">
+      <Project>{fd3cfbc3-04e4-4171-b5fe-f01d5e67fe5f}</Project>
+      <Name>ENG.WMOCodes.Decoders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Downloaders\ENG.WMOCodes.Downloaders.csproj">
+      <Project>{c65926bf-1738-48b8-8786-b97d19de8f78}</Project>
+      <Name>ENG.WMOCodes.Downloaders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Formatters.InfoFormatter\ENG.WMOCodes.Formatters.InfoFormatter.csproj">
+      <Project>{ea929cdb-b552-491b-b88e-11f4c43f13c3}</Project>
+      <Name>ENG.WMOCodes.Formatters.InfoFormatter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Formatters.ShortInfo\ENG.WMOCodes.Formatters.ShortInfo.csproj">
+      <Project>{cb76ce16-f214-45b7-8c19-5fd2bf630d3c}</Project>
+      <Name>ENG.WMOCodes.Formatters.ShortInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Formatters\ENG.WMOCodes.Formatters.csproj">
+      <Project>{cc0ee654-7007-40d8-8601-b45d18abef18}</Project>
+      <Name>ENG.WMOCodes.Formatters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes\ENG.WMOCodes.csproj">
+      <Project>{547ef9f2-e2c6-4c0b-af96-73a81d804022}</Project>
+      <Name>ENG.WMOCodes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

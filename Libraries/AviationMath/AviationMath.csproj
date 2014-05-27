@@ -41,6 +41,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicGeopositionExtensions.cs" />
     <Compile Include="Crosswind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitConverter.cs" />

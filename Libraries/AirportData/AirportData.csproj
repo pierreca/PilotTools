@@ -34,6 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AirportType.cs" />
+    <Compile Include="FlightPlan.cs" />
     <Compile Include="IAirport.cs" />
     <Compile Include="OurAirports\Airport.cs" />
     <Compile Include="AirportDirectoryException.cs" />

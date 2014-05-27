@@ -24,9 +24,13 @@ namespace AirportData.OurAirports
 
         public string Name { get; set; }
 
+        public bool IsPositionValid { get; set; }
+
         public BasicGeoposition Position { get; set; }
 
         public IEnumerable<IRunway> Runways { get; set; }
+
+        public AirportType Type { get; set; }
 
         public static IAirport CreateFromString(string s)
         {
@@ -50,8 +54,40 @@ namespace AirportData.OurAirports
                     Altitude = alt,
                     Latitude = lat,
                     Longitude = lng
-                }
+                },
+                IsPositionValid = (lat != 0.0 && lng != 0.0 ),
+                Type = AirportTypeFromString(fields[2].Trim('"'))
             };
+
+            return result;
+        }
+
+        private static AirportType AirportTypeFromString(string s)
+        {
+            AirportType result;
+            switch(s)
+            {
+                case "balloonport":
+                    result = AirportType.BalloonPort;
+                    break;
+                case "small_airport":
+                case "medium_airport":
+                case "large_airport":
+                    result = AirportType.Airport;
+                    break;
+                case "heliport":
+                    result = AirportType.Heliport;
+                    break;
+                case "seaplane_base":
+                    result = AirportType.SeaPlaneBase;
+                    break;
+                case "closed":
+                    result = AirportType.Closed;
+                    break;
+                default:
+                    result = AirportType.Unknown;
+                    break;
+            }
 
             return result;
         }

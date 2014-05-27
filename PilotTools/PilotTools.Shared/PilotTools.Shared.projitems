@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -15,5 +15,32 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\AirportDiagram.xaml.cs">
+      <DependentUpon>AirportDiagram.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\AirportSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\DataLoadedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\DataSourceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\DataSourceContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\DataSourceType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\FlightPlanSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\IDataSourceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataSources\IDataSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Favorites.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Location.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportsPivotViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DataSourceViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\EditFlightPlanViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoadingViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SearchViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\AirportDiagram.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
