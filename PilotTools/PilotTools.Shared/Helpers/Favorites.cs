@@ -66,7 +66,7 @@ namespace PilotTools.Helpers
                     }
                 }
             }
-            catch (FileNotFoundException fnfex)
+            catch (FileNotFoundException)
             {
                 Debug.WriteLine("No favs file. Creating one.");
                 fileCreationNeeded = true;

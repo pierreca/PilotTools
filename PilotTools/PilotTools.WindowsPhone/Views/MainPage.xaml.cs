@@ -1,5 +1,6 @@
 ﻿using AirportData;
 using PilotTools.Common;
+using PilotTools.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,7 @@ namespace PilotTools.Views
     public sealed partial class MainPage : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private AirportsPivotViewModel viewModel = new AirportsPivotViewModel(App.Current.DataSourceManager);
 
         public MainPage()
         {
@@ -41,12 +42,12 @@ namespace PilotTools.Views
 
         private void lbFavorites_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as IAirport).ICAO);
+            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as AirportViewModel).Airport.ICAO);
         }
 
         private void lbAroundMe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as IAirport).ICAO);
+            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as AirportViewModel).Airport.ICAO);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace PilotTools.Views
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
+        public AirportsPivotViewModel ViewModel
         {
-            get { return this.defaultViewModel; }
+            get { return this.viewModel; }
         }
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace PilotTools.Views
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.DataContext = this.ViewModel;
+            this.ViewModel.Load.Execute(null);
         }
 
         /// <summary>
@@ -120,13 +123,6 @@ namespace PilotTools.Views
 
         #endregion
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            var vm = new ViewModels.AirportsPivotViewModel(App.Current.DataSourceManager);
-            this.DataContext = vm;
-            vm.Load.Execute(null);
-        }
-
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch((LayoutRoot as Pivot).SelectedIndex)
@@ -146,6 +142,11 @@ namespace PilotTools.Views
         private void lbFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Settings));
         }
     }
 }

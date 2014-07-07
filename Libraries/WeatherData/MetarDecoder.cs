@@ -24,7 +24,43 @@ namespace WeatherData
             {
                 ret.IsValid = true;
                 ret.Raw = result.Result;
+                ret.DewPoint = metar.DewPoint;
+                ret.Temperature = metar.Temperature;
+                ret.Visibility = (int) metar.Visibility.Distance; 
+                ret.Wind = metar.Wind.Direction + "@" + metar.Wind.Speed;
+
+                var layers = new List<CloudLayer>();
+                foreach (var cl in metar.Clouds)
+                {
+                    var layer = new CloudLayer();
+                    layer.Altitude = cl.Altitude * 100;
+                    switch (cl.Type)
+                    {
+                        case ENG.WMOCodes.Types.Cloud.eType.FEW:
+                            layer.Type = CloudLayerType.FEW;
+                            layer.IsCeiling = false;
+                            break;
+                        case ENG.WMOCodes.Types.Cloud.eType.SCT:
+                            layer.Type = CloudLayerType.SCT;
+                            layer.IsCeiling = false;
+                            break;
+                        case ENG.WMOCodes.Types.Cloud.eType.BKN:
+                            layer.Type = CloudLayerType.BKN;
+                            layer.IsCeiling = true;
+                            break;
+                        case ENG.WMOCodes.Types.Cloud.eType.OVC:
+                            layer.Type = CloudLayerType.OVC;
+                            layer.IsCeiling = true;
+                            break;
+                    }
+
+                    layers.Add(layer);
+                }
+
+                ret.Clouds = layers;
                 ret.MetarObj = metar;
+
+                ret.ComputeFlightRules();
             }
 
             return ret;

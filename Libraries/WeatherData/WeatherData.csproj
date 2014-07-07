@@ -38,6 +38,8 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloudLayer.cs" />
+    <Compile Include="FlightRules.cs" />
     <Compile Include="IMetarDecoder.cs" />
     <Compile Include="Metar.cs" />
     <Compile Include="MetarDecoder.cs" />

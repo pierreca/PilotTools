@@ -179,15 +179,23 @@ namespace AirportData.OurAirports
         public async Task LoadAsync()
         {
             var folder = FileSystem.Current.LocalStorage;
-            var file = await folder.GetFileAsync(AirportsFileName);
+            var airportFileExists = await folder.CheckExistsAsync(AirportsFileName);
+            var runwayFileExists = await folder.CheckExistsAsync(RunwaysFileName);
 
-            using (var s = await file.OpenAsync(FileAccess.Read))
+            if (airportFileExists == ExistenceCheckResult.NotFound || runwayFileExists == ExistenceCheckResult.NotFound)
+            {
+                await this.DownloadAndSaveAsync();
+            }
+            
+            var cacheFile = await folder.GetFileAsync(AirportsFileName);
+
+            using (var s = await cacheFile.OpenAsync(FileAccess.Read))
             {
                 this.airports = this.ParseAirportData(s);
             }
 
-            file = await folder.GetFileAsync(RunwaysFileName);
-            using (var s = await file.OpenAsync(FileAccess.Read))
+            cacheFile = await folder.GetFileAsync(RunwaysFileName);
+            using (var s = await cacheFile.OpenAsync(FileAccess.Read))
             {
                 this.runways = this.ParseRunwayData(s);
             }

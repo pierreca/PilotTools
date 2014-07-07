@@ -1,4 +1,5 @@
 ﻿using PilotTools.Common;
+using PilotTools.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,7 @@ namespace PilotTools.Views
     public sealed partial class Settings : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private SettingsViewModel viewModel = new SettingsViewModel(App.Current.DataSourceManager);
 
         public Settings()
         {
@@ -54,9 +55,9 @@ namespace PilotTools.Views
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
+        public SettingsViewModel ViewModel
         {
-            get { return this.defaultViewModel; }
+            get { return this.viewModel; }
         }
 
         /// <summary>
@@ -70,8 +71,10 @@ namespace PilotTools.Views
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            await this.ViewModel.LoadAsync();
+            this.DataContext = this.ViewModel;
         }
 
         /// <summary>
@@ -82,8 +85,9 @@ namespace PilotTools.Views
         /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
         /// <param name="e">Event data that provides an empty dictionary to be populated with
         /// serializable state.</param>
-        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        private async void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            await this.ViewModel.SaveSettings();
         }
 
         #region NavigationHelper registration

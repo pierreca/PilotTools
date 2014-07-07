@@ -8,12 +8,21 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="PersonalMinimumsLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
+    
+    
     <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - SETTINGS">
         <PivotItem Header="database">
             <Grid>
                 <ListBox x:Name="lbDataSources" 
                          Background="Transparent"
-                         ItemsSource="{Binding SourceManager.Sources}"
+                         ItemsSource="{Binding DataSources}"
                          SelectionChanged="lbDataSources_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -24,6 +33,51 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
+            </Grid>
+        </PivotItem>
+        <PivotItem Header="minimums">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1.5*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Visibility (SM)"
+                           Style="{StaticResource PersonalMinimumsLabelStyle}" />
+                <TextBlock Grid.Row="1"
+                           Style="{StaticResource PersonalMinimumsLabelStyle}"
+                           Text="Ceiling (ft)" />
+                <TextBlock Grid.Row="2"
+                           Style="{StaticResource PersonalMinimumsLabelStyle}"
+                           Text="Crosswind (kt)" />
+                <TextBlock Grid.Row="3"
+                           Style="{StaticResource PersonalMinimumsLabelStyle}"
+                           Text="Runway Length (ft)" />
+                <TextBlock Grid.Row="4"
+                           Style="{StaticResource PersonalMinimumsLabelStyle}"
+                           Text="Runway Width (ft)" />
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding Minimums.Visibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         Text="{Binding Minimums.Ceiling, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="2"
+                         Grid.Column="1"
+                         Text="{Binding Minimums.Crosswind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="3"
+                         Grid.Column="1"
+                         Text="{Binding Minimums.RunwayLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="4"
+                         Grid.Column="1"
+                         Text="{Binding Minimums.RunwayWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </PivotItem>
         <PivotItem Header="location">

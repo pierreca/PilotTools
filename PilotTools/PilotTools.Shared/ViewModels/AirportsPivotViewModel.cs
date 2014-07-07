@@ -14,7 +14,7 @@ namespace PilotTools.ViewModels
     {
         private int aroundMeRadius;
 
-        private ObservableCollection<IAirport> favorites;
+        private ObservableCollection<AirportViewModel> favorites;
         private ObservableCollection<IAirport> aroundMe;
 
         private ObservableCollection<FlightPlan> flightPlans;
@@ -40,10 +40,10 @@ namespace PilotTools.ViewModels
             set { this.SetProperty<int>(ref this.aroundMeRadius, value); }
         }
 
-        public ObservableCollection<IAirport> Favorites
+        public ObservableCollection<AirportViewModel> Favorites
         {
             get { return this.favorites; }
-            set { this.SetProperty<ObservableCollection<IAirport>>(ref this.favorites, value); }
+            set { this.SetProperty<ObservableCollection<AirportViewModel>>(ref this.favorites, value); }
         }
 
         public ObservableCollection<IAirport> AroundMe
@@ -76,7 +76,14 @@ namespace PilotTools.ViewModels
                 
                 if (favs.Count() > 0)
                 {
-                    this.Favorites = new ObservableCollection<IAirport>(favs.Select(f => airportsDB.GetAirportData(f)));
+                    this.Favorites = new ObservableCollection<AirportViewModel>();
+                    var airports = favs.Select(f => airportsDB.GetAirportData(f));
+                    foreach (var airport in airports)
+                    {
+                        var vm = new AirportViewModel(this.SourceManager);
+                        await vm.LoadAirportDataAsync(airport.ICAO);
+                        this.Favorites.Add(vm);
+                    }
                 }
             } 
             catch (Exception ex)
