@@ -26,8 +26,10 @@ namespace WeatherData
                 ret.Raw = result.Result;
                 ret.DewPoint = metar.DewPoint;
                 ret.Temperature = metar.Temperature;
-                ret.Visibility = (int) metar.Visibility.Distance; 
-                ret.Wind = metar.Wind.Direction + "@" + metar.Wind.Speed;
+                ret.Visibility = (int) metar.Visibility.Distance;
+                ret.Wind = new Wind();
+                ret.Wind.Direction = metar.Wind.Direction.Value;
+                ret.Wind.Speed = metar.Wind.Speed.Value;
 
                 var layers = new List<CloudLayer>();
                 foreach (var cl in metar.Clouds)
