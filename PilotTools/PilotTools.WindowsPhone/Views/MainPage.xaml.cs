@@ -42,12 +42,12 @@ namespace PilotTools.Views
 
         private void lbFavorites_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as AirportViewModel).Airport.ICAO);
+            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListView).SelectedItem as AirportViewModel).Airport.ICAO);
         }
 
         private void lbAroundMe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListBox).SelectedItem as AirportViewModel).Airport.ICAO);
+            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListView).SelectedItem as AirportViewModel).Airport.ICAO);
         }
 
         /// <summary>

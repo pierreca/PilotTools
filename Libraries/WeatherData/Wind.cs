@@ -29,14 +29,14 @@ namespace WeatherData
                 var sb = new StringBuilder();
                 if(IsVariable)
                 {
-                    sb.Append(string.Format("VRB@{0}", Direction));
+                    sb.Append(string.Format("Variable @ {0} kts", this.Speed));
                 }
                 else
                 {
-                    sb.Append(string.Format("{0}@{1}", Speed, Direction));
+                    sb.Append(string.Format("From {0} @ {1} kts", this.Direction, this.Speed));
                     if(this.GustSpeed > 0)
                     {
-                        sb.Append(string.Format("G{0}", this.GustSpeed));
+                        sb.Append(string.Format(", gusts at {0}", this.GustSpeed));
                     }
                 }
 

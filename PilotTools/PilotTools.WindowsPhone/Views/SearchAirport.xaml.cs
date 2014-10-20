@@ -2,6 +2,7 @@
 using PilotTools.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -109,5 +110,20 @@ namespace PilotTools.Views
         }
 
         #endregion
+
+        private void lbResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var vm = this.DataContext as SearchViewModel;
+
+            if(vm != null)
+            {
+                vm.HasResultsSelected = this.lbResults.SelectedItems.Any();
+                vm.SelectedResults = new ObservableCollection<AirportViewModel>();
+                foreach (var avm in this.lbResults.SelectedItems)
+                {
+                    vm.SelectedResults.Add((AirportViewModel)avm);
+                }
+            }
+        }
     }
 }

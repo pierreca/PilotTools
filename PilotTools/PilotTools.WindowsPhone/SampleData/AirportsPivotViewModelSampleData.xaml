@@ -2,52 +2,59 @@
 								   xmlns:AirportData="using:AirportData" 
 								   xmlns:WeatherData="using:WeatherData" 
 								   xmlns:OurAirports="using:AirportData.OurAirports"
-								   AroundMeRadius="15" 
-								   SearchCode="KRNT">
+								   AroundMeRadius="21" 
+								   HasNetwork="True" 
+								   SearchCode="Aliquet aptent">
 	<ViewModels:AirportsPivotViewModel.FlightPlans>
-		<AirportData:FlightPlan/>
 		<AirportData:FlightPlan/>
 		<AirportData:FlightPlan/>
 	</ViewModels:AirportsPivotViewModel.FlightPlans>
 	<ViewModels:AirportsPivotViewModel.Favorites>
-		<ViewModels:AirportViewModel>
+		<ViewModels:AirportViewModel HasMetar="True" MeetsPersonalMinimums="True">
 			<ViewModels:AirportViewModel.AddFavorite>
 				<ViewModels:RelayCommand/>
 			</ViewModels:AirportViewModel.AddFavorite>
-			<!--<ViewModels:AirportViewModel.Airport>
-				<OurAirports:Airport ICAO="KRNT" Name="Renton Municipal Airport" />
-			</ViewModels:AirportViewModel.Airport>-->
 			<ViewModels:AirportViewModel.Metar>
-				<WeatherData:Metar DewPoint="11" IsValid="True" Raw="Class aliquam maecenas" Temperature="26" Visibility="10" Wind="CALM"/>
+				<WeatherData:Metar ApplicableFlightRules="VFR" DewPoint="12" IsValid="True" Raw="Class aliquam integer" Temperature="18" Visibility="10">
+					<WeatherData:Metar.Clouds>
+						<WeatherData:CloudLayer Altitude="2100" IsCeiling="False" Type="SCT"/>
+						<WeatherData:CloudLayer Altitude="4200" IsCeiling="True" Type="BKN"/>
+					</WeatherData:Metar.Clouds>
+					<WeatherData:Metar.Wind>
+						<WeatherData:Wind Direction="120" GustSpeed="0" IsVariable="False" Speed="6" />
+					</WeatherData:Metar.Wind>
+				</WeatherData:Metar>
 			</ViewModels:AirportViewModel.Metar>
 		</ViewModels:AirportViewModel>
-		<ViewModels:AirportViewModel>
+		<ViewModels:AirportViewModel HasMetar="True" MeetsPersonalMinimums="True">
 			<ViewModels:AirportViewModel.AddFavorite>
 				<ViewModels:RelayCommand/>
 			</ViewModels:AirportViewModel.AddFavorite>
 			<ViewModels:AirportViewModel.Metar>
-                <WeatherData:Metar DewPoint="8" IsValid="False" Raw="Donec mauris praesent sed" Temperature="20" Visibility="3" Wind="VRB@3kt">
-                    <WeatherData:Metar.Clouds>
-                        <WeatherData:CloudLayer Altitude="3500" Type="FEW" IsCeiling="false" />
-                        <WeatherData:CloudLayer Altitude="4500" Type="BKN" IsCeiling="true" />
-                    </WeatherData:Metar.Clouds>
-                </WeatherData:Metar>
-            </ViewModels:AirportViewModel.Metar>
-		</ViewModels:AirportViewModel>
-		<ViewModels:AirportViewModel>
-			<ViewModels:AirportViewModel.AddFavorite>
-				<ViewModels:RelayCommand/>
-			</ViewModels:AirportViewModel.AddFavorite>
-			<ViewModels:AirportViewModel.Metar>
-				<WeatherData:Metar DewPoint="12" IsValid="True" Raw="Parturient dictumst nunc fusce dis" Temperature="18" Visibility="8" Wind="300@8kt"/>
+				<WeatherData:Metar ApplicableFlightRules="MVFR" DewPoint="12" IsValid="False" Raw="Cras aenean duis nunc" Temperature="13" Visibility="4">
+					<WeatherData:Metar.Clouds>
+						<WeatherData:CloudLayer Altitude="1700" IsCeiling="False" Type="FEW"/>
+						<WeatherData:CloudLayer Altitude="2500" IsCeiling="True" Type="BKN"/>
+					</WeatherData:Metar.Clouds>
+					<WeatherData:Metar.Wind>
+						<WeatherData:Wind Direction="330" GustSpeed="0" IsVariable="True" Speed="8" VrbDirectionHigh="290" VrbDirectionLow="350"/>
+					</WeatherData:Metar.Wind>
+				</WeatherData:Metar>
 			</ViewModels:AirportViewModel.Metar>
 		</ViewModels:AirportViewModel>
-		<ViewModels:AirportViewModel>
+		<ViewModels:AirportViewModel HasMetar="True" MeetsPersonalMinimums="False">
 			<ViewModels:AirportViewModel.AddFavorite>
 				<ViewModels:RelayCommand/>
 			</ViewModels:AirportViewModel.AddFavorite>
 			<ViewModels:AirportViewModel.Metar>
-				<WeatherData:Metar Clouds="CLR" DewPoint="11" IsValid="False" Raw="Faucibus aliquet hac habitant convallis" Temperature="19" Visibility="10" Wind="160@10kt"/>
+				<WeatherData:Metar ApplicableFlightRules="IFR" DewPoint="10" IsValid="True" Raw="Mauris curae nam amet" Temperature="10" Visibility="2">
+					<WeatherData:Metar.Clouds>
+						<WeatherData:CloudLayer Altitude="1000" IsCeiling="True" Type="BKN"/>
+					</WeatherData:Metar.Clouds>
+					<WeatherData:Metar.Wind>
+						<WeatherData:Wind Direction="110" GustSpeed="28" IsVariable="False" Speed="18" />
+					</WeatherData:Metar.Wind>
+				</WeatherData:Metar>
 			</ViewModels:AirportViewModel.Metar>
 		</ViewModels:AirportViewModel>
 	</ViewModels:AirportsPivotViewModel.Favorites>

@@ -85,5 +85,18 @@
                 <ToggleButton x:Name="tglLocationServices" Content="allow use of current location" />
             </StackPanel>
         </PivotItem>
+        <PivotItem Header="credits">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Developer:"
+                           FontWeight="Bold"/>
+                <TextBlock FontSize="16"
+                           Text="Pierre Cauchois" />
+                <TextBlock Text="Logo:"
+                           FontWeight="Bold"/>
+                <TextBlock FontSize="16">
+                    Airplane by Shirley Wu from The Noun Project
+                </TextBlock>
+            </StackPanel>
+        </PivotItem>
     </Pivot>
 </Page>

@@ -31,61 +31,54 @@
         <Grid Grid.Row="1" x:Name="ContentRoot">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <TextBox x:Name="tbSearch"
                          Margin="24,0"
                          Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         VerticalAlignment="Center"
-                         Width="100" />
+                         VerticalAlignment="Center" />
                 
                 <Button x:Name="BtnSearch"
+                        Grid.Column="1"
                         Content="Search"
-                        Command="{Binding Search}"  />
-            </StackPanel>
-
-            <!-- Airport Grid -->
-            <Grid Grid.Row="1" DataContext="{Binding Result}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" /> <!--Airport full name -->
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="33*" />
-                    <ColumnDefinition Width="66*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.ColumnSpan="2"
-                           Foreground="White"
-                           Text="{Binding Airport.Name}" />
-                
-                <TextBlock Grid.Row="1"
-                           FontSize="36"
-                           Foreground="White"
-                           Text="{Binding Airport.ICAO}" />
-
-                <maps:MapControl x:Name="map" 
-                                 Grid.Row="1"
-                                 Grid.Column="1"
-                                 Height="{Binding Width, ElementName=map}"
-                                 Center="{Binding MapCenter}" 
-                                 ZoomLevel="14" />
-
-
-                <TextBlock Grid.Row="2"
-                           Text="{Binding Metar}" />
-                
-                <Button x:Name="BtnAddFavorite"
-                        Grid.Row="3"
-                        Grid.ColumnSpan="2"
-                        Content="Add to favorites"
-                        Command="{Binding AddFavorite}" 
-                        HorizontalAlignment="Center"/>
+                        Command="{Binding Search}" 
+                        Margin="0,0,24,0"/>
             </Grid>
+
+            <TextBlock Grid.Row="1"
+                       Foreground="Red"
+                       Margin="24,0"
+                       FontSize="18"
+                       Text="Please enter a valid ICAO identifier"
+                       Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibleConverter}}" />
+            
+            <ListBox x:Name="lbResults" 
+                     Grid.Row="2"
+                     Background="Transparent"
+                     Foreground="White"
+                     ItemsSource="{Binding Results}"
+                     ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                     ItemTemplate="{StaticResource AirportItemTemplate}" 
+                     SelectionChanged="lbResults_SelectionChanged"
+                     SelectionMode="Multiple"
+                     Margin="24,0"/>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Visibility="{Binding HasResultsSelected, Converter={StaticResource BoolToVisibleConverter}}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton x:Name="BtnAddFavorites"
+                              Command="{Binding AddFavorites}"
+                              Icon="Favorite"
+                              Label="Add favorites" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

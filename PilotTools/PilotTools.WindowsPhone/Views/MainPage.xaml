@@ -3,119 +3,20 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PilotTools.Views"
-    xmlns:conv="using:PilotTools.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DataContext="{d:DesignData /SampleData/AirportsPivotViewModelSampleData.xaml}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+	d:DataContext="{d:DesignData /SampleData/AirportsPivotViewModelSampleData.xaml}">
     
-    <Page.Resources>
-        <conv:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
-        <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
-        
-        <DataTemplate x:Key="AirportItemTemplate">
+
+    <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - AIRPORTS">
+        <PivotItem Header="favorites">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="20"
-                               Margin="0,0,10,0"
-                               Text="{Binding Airport.ICAO}" />
-                    <TextBlock FontSize="20" 
-                               Text="(" />
-                    <TextBlock FontSize="20" 
-                               Text="{Binding Airport.Name}" />
-                    <TextBlock FontSize="20" 
-                               Text=")" />
-                </StackPanel>
-                
-                <Grid Grid.Row="1" Visibility="{Binding HasMetar, Converter={StaticResource BoolToVisibleConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Metar.Wind}" 
-                               FontSize="16"
-                               TextWrapping="Wrap"/>
-                    
-                    <StackPanel Grid.Column="1"
-                                Orientation="Horizontal">
-                        <TextBlock Text="{Binding Metar.Temperature}" 
-                               FontSize="16"
-                               TextWrapping="Wrap"/>
-                        <TextBlock Text="/" 
-                                   FontSize="16"
-                                   Margin="10,0"/>
-                        <TextBlock Text="{Binding Metar.DewPoint}" 
-                               FontSize="16"
-                               TextWrapping="Wrap"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2"
-                               Orientation="Horizontal">
-                        
-                    <TextBlock Text="{Binding Metar.Visibility}" 
-                               FontSize="16"
-                               TextWrapping="Wrap"/>
-                        
-                        <TextBlock Text="SM"
-                                   FontSize="16"
-                                   Margin="5,0" />
-                    </StackPanel>
-                    
-                    <TextBlock Grid.Column="3"
-                               Text="{Binding Metar.ApplicableFlightRules}"
-                               FontSize="16" />
-
-                    <TextBlock Grid.Column="4"
-                               Text="{Binding MeetsPersonalMinimums}"
-                               FontSize="16" />
-
-                    <ListBox Grid.Row="1"
-                             Grid.ColumnSpan="4"
-                             Background="Black"
-                             Foreground="White"
-                             ItemsSource="{Binding Metar.Clouds}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontSize="16"
-                                               Text="{Binding Type}" />
-                                    <TextBlock FontSize="16" 
-                                               Text="{Binding Altitude}"
-                                               Margin="5,0" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
-                </Grid>
-                
-            </Grid>
-        </DataTemplate>
-        
-        <Style x:Key="AirportContainerStyle" TargetType="ListBoxItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-    </Page.Resources>
-
-    <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - AIRPORTS">
-        <PivotItem Header="favorites">
-            <StackPanel>
                 <Border Background="Red"
                         Padding="0,5"
                         Visibility="{Binding HasNetwork, Converter={StaticResource BoolToCollapsedConverter}}" >
@@ -124,32 +25,33 @@
                            FontWeight="Bold"
                            Foreground="White"/>
                 </Border>
-                <ListBox x:Name="lbFavorites" 
-                         Background="Transparent"
-                         Foreground="White"
-                         ItemsSource="{Binding Favorites}"
-                         ItemContainerStyle="{StaticResource AirportContainerStyle}"
-                         ItemTemplate="{StaticResource AirportItemTemplate}"
-                         SelectionChanged="lbFavorites_SelectionChanged"
-                         FontSize="36" />
-            </StackPanel>
+                <ListView x:Name="lbFavorites" 
+                          Grid.Row="1"
+                          Background="Transparent"
+                          Foreground="White"
+                          ItemsSource="{Binding Favorites}"
+                          ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                          ItemTemplate="{StaticResource AirportItemTemplate}"
+                          SelectionChanged="lbFavorites_SelectionChanged"
+                          FontSize="36" />
+            </Grid>
         </PivotItem>
         <PivotItem Header="flight plans">
-            <ListBox x:Name="lbFlightPlans"
-                     Background="Transparent"
-                     Foreground="White"
-                     ItemsSource="{Binding FlightPlans}"
-                     SelectionChanged="lbFlightPlans_SelectionChanged"
-                     FontSize="36" />
+            <ListView x:Name="lbFlightPlans"
+                      Background="Transparent"
+                      Foreground="White"
+                      ItemsSource="{Binding FlightPlans}"
+                      SelectionChanged="lbFlightPlans_SelectionChanged"
+                      FontSize="36" />
         </PivotItem>
         <PivotItem Header="around me">
-            <ListBox x:Name="lbAroundMe" 
-                     Background="Transparent"
-                     ItemsSource="{Binding AroundMe}"
-                     DisplayMemberPath="ICAO"
-                     Foreground="White"
-                     SelectionChanged="lbAroundMe_SelectionChanged"
-                     FontSize="36" />
+            <ListView x:Name="lbAroundMe" 
+                      Background="Transparent"
+                      ItemsSource="{Binding AroundMe}"
+                      DisplayMemberPath="ICAO"
+                      Foreground="White"
+                      SelectionChanged="lbAroundMe_SelectionChanged"
+                      FontSize="36" />
         </PivotItem>
     </Pivot>
     <Page.BottomAppBar>

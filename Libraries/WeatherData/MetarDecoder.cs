@@ -28,7 +28,12 @@ namespace WeatherData
                 ret.Temperature = metar.Temperature;
                 ret.Visibility = (int) metar.Visibility.Distance;
                 ret.Wind = new Wind();
-                ret.Wind.Direction = metar.Wind.Direction.Value;
+                ret.Wind.IsVariable = metar.Wind.IsVariable;
+                if (!metar.Wind.IsVariable)
+                {
+                    ret.Wind.Direction = metar.Wind.Direction.Value;
+                }
+
                 ret.Wind.Speed = metar.Wind.Speed.Value;
 
                 var layers = new List<CloudLayer>();
