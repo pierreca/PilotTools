@@ -158,7 +158,7 @@ namespace PilotTools.Controls
             }
 
             this.drawingSurface.Children.Clear();
-            this.drawingSurface.Background = new SolidColorBrush(Colors.DarkGray);
+            this.drawingSurface.Background = new SolidColorBrush(Colors.Black);
 
             foreach (var rwy in this.Airport.Runways)
             {
@@ -169,6 +169,7 @@ namespace PilotTools.Controls
                 line.Y2 = Math.Abs(rwy.End2.Position.Latitude - topleft.Latitude) * scale + topMargin;
 
                 line.Stroke = new SolidColorBrush(Colors.White);
+                line.Opacity = 0.8;
                 line.StrokeThickness = 10;
 
                 this.drawingSurface.Children.Add(line);

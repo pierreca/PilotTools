@@ -59,16 +59,16 @@
                        Text="Please enter a valid ICAO identifier"
                        Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibleConverter}}" />
             
-            <ListBox x:Name="lbResults" 
-                     Grid.Row="2"
-                     Background="Transparent"
-                     Foreground="White"
-                     ItemsSource="{Binding Results}"
-                     ItemContainerStyle="{StaticResource AirportContainerStyle}"
-                     ItemTemplate="{StaticResource AirportItemTemplate}" 
-                     SelectionChanged="lbResults_SelectionChanged"
-                     SelectionMode="Multiple"
-                     Margin="24,0"/>
+            <ListView x:Name="lbResults" 
+                      Grid.Row="2"
+                      Background="Transparent"
+                      Foreground="White"
+                      ItemsSource="{Binding Results}"
+                      ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                      ItemTemplate="{StaticResource AirportItemTemplate}" 
+                      SelectionChanged="lbResults_SelectionChanged"
+                      SelectionMode="Multiple"
+                      Margin="24,0"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>

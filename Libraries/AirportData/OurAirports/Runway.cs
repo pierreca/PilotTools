@@ -28,7 +28,7 @@ namespace AirportData.OurAirports
 
         public static IRunway CreateFromString(string s)
         {
-            int id, airportId, length, width, identifier, threshold;
+            int id, airportId, length, width, threshold;
             double lat, lng, alt;
 
             var fields = s.Split(',');
@@ -48,8 +48,6 @@ namespace AirportData.OurAirports
                     Closed = parseBool(fields[7]),
                 };
 
-
-            int.TryParse(fields[8].Trim('"'), out identifier);
             int.TryParse(fields[12].Trim('"'), out threshold);
             double.TryParse(fields[9].Trim('"'), out lat);
             double.TryParse(fields[10].Trim('"'), out lng);
@@ -57,7 +55,7 @@ namespace AirportData.OurAirports
 
             result.End1 = new RunwayEnd()
             {
-                Identifier = identifier,
+                Identifier = fields[8].Trim('"'),
                 DisplacedThreshold = threshold,
                 Position = new BasicGeoposition()
                 {
@@ -67,7 +65,6 @@ namespace AirportData.OurAirports
                 }
             };
 
-            int.TryParse(fields[14].Trim('"'), out identifier);
             int.TryParse(fields[18].Trim('"'), out threshold);
             double.TryParse(fields[15].Trim('"'), out lat);
             double.TryParse(fields[16].Trim('"'), out lng);
@@ -75,7 +72,7 @@ namespace AirportData.OurAirports
 
             result.End2 = new RunwayEnd()
             {
-                Identifier = identifier,
+                Identifier = fields[14].Trim('"'),
                 DisplacedThreshold = threshold,
                 Position = new BasicGeoposition()
                 {

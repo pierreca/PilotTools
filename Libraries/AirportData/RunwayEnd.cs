@@ -9,11 +9,10 @@ namespace AirportData
 {
     public class RunwayEnd
     {
-        public int Identifier;
-        public int Heading;
+        public string Identifier { get; set; }
 
-        public BasicGeoposition Position;
-        
-        public int DisplacedThreshold;
+        public BasicGeoposition Position { get; set; }
+
+        public int DisplacedThreshold { get; set; }
     }
 }

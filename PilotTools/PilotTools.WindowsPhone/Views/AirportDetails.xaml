@@ -10,26 +10,187 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="AirportCodeStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="48" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
+    
     <Pivot x:Name="LayoutRoot" Title="{Binding Airport.Name}">
         <PivotItem Header="summary">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25*" />
-                    <RowDefinition Height="75*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <maps:MapControl x:Name="map" 
-                                     Center="{Binding MapCenter}" 
-                                     ZoomLevel="14" />
+                <maps:MapControl x:Name="map"
+                                 Height="{Binding ElementName=map, Path=ActualWidth}"
+                                 Center="{Binding MapCenter}" 
+                                 ZoomLevel="13" />
 
-                <ctrls:AirportDiagram Grid.Row="1" Airport="{Binding Airport, Mode=TwoWay}" />
+                <Grid Grid.Column="1" 
+                      Height="{Binding ElementName=map, Path=ActualWidth}">
+                    <ctrls:AirportDiagram Airport="{Binding Airport, Mode=TwoWay}" />
+                </Grid>
+                
+                <Grid Grid.Row="1"
+                      Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Airport.ICAO}"
+                                   Style="{StaticResource AirportCodeStyle}"/>
+                        
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right">
+                            <TextBlock Text="(" 
+                                       Style="{StaticResource AirportCodeStyle}"/>
+                            <TextBlock Text="{Binding Airport.LocalCode}" 
+                                       Style="{StaticResource AirportCodeStyle}"/>
+                            <TextBlock Text=")" 
+                                       Style="{StaticResource AirportCodeStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Grid.Row="1"
+                               Text="{Binding Airport.Name}" 
+                               TextWrapping="Wrap"
+                               FontSize="24"/>
 
+                    <Border Grid.Row="2"
+                            Background="Red"
+                            Visibility="{Binding MeetsPersonalMinimums, Converter={StaticResource BoolToCollapsedConverter}}">
+                        <TextBlock Grid.Column="2"
+                                Text="Minimums!"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="16" />
+                    </Border>
+
+
+                    <ListView Grid.Row="3"
+                              Margin="0,24,0,0"
+                              ItemsSource="{Binding Airport.Runways}"
+                              ItemTemplate="{StaticResource RunwayItemTemplate}"
+                              ItemContainerStyle="{StaticResource RunwayContainerStyle}"
+                              FontSize="24"/>
+                    
+                </Grid>
+                
             </Grid>
         </PivotItem>
-        <PivotItem Header="weather">
+        <PivotItem Header="weather"
+                   Visibility="{Binding HasMetar, Converter={StaticResource BoolToVisibleConverter}}">
             <Grid>
-                <TextBlock Text="{Binding Metar}" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Border Grid.ColumnSpan="2"
+                        Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
+                    <TextBlock Text="{Binding Metar.ApplicableFlightRules}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="28" />
+                </Border>
+                
+                <TextBlock Grid.Row="1"
+                           Text="Wind: " 
+                           FontSize="18"/>
+                <TextBlock Grid.Row="2" 
+                           Text="Temperature: " 
+                           FontSize="18"
+                           Margin="0,0,10,0"/>
+                <TextBlock Grid.Row="3" 
+                           Text="Visibility: " 
+                           FontSize="18" />
+                <TextBlock Grid.Row="4" 
+                           Text="Clouds: " 
+                           FontSize="18" />
+
+                <TextBlock Grid.Column="1"
+                           Grid.Row="1"
+                           Text="{Binding Metar.Wind}" 
+                           FontSize="18" />
+
+                <StackPanel Grid.Column="1"
+                            Grid.Row="2"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{Binding Metar.Temperature}" 
+                               FontSize="18"
                                TextWrapping="Wrap"/>
+                    <TextBlock Text="/"
+                               Margin="2,0"
+                               FontSize="18"/>
+                    <TextBlock Text="{Binding Metar.DewPoint}" 
+                               FontSize="18"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Grid.Row="3"
+                            Orientation="Horizontal">
+
+                    <TextBlock Text="{Binding Metar.Visibility}" 
+                            FontSize="16"
+                            TextWrapping="Wrap"/>
+
+                    <TextBlock Text="SM"
+                                FontSize="16"
+                                Margin="5,0" />
+                </StackPanel>
+
+            <ListView Grid.Row="4"
+                            Grid.Column="1"
+                            Background="Black"
+                            Foreground="White"
+                            IsHitTestVisible="False"
+                            ItemsSource="{Binding Metar.Clouds}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="16"
+                                            Text="{Binding Type}" />
+                            <TextBlock FontSize="16" 
+                                            Text="{Binding Altitude}"
+                                            Margin="5,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
             </Grid>
         </PivotItem>
     </Pivot>
