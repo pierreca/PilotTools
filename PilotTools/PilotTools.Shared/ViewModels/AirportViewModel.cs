@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AviationMath;
 using WeatherData;
 using Windows.Devices.Geolocation;
+using PilotTools.Common;
 
 namespace PilotTools.ViewModels
 {
@@ -71,8 +72,8 @@ namespace PilotTools.ViewModels
         {
             try
             {
-                var airportSource = this.SourceManager.DataSources[DataSourceContent.Airports] as AirportSource;
-                this.Airport = airportSource.Directory.GetAirportData(airportCode);
+                var airportDirectory = this.SourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
+                this.Airport = airportDirectory.GetAirportData(airportCode);
                 this.MapCenter = new Geopoint(this.Airport.Position);
                 
                 if (SystemHelper.HasNetwork)

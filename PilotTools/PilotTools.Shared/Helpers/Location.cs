@@ -19,7 +19,7 @@ namespace PilotTools.Helpers
                 
                 result = pos.Coordinate.Point.Position;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

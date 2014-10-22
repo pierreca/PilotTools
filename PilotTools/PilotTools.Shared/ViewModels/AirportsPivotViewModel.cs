@@ -1,4 +1,6 @@
 ﻿using AirportData;
+using FlightPlanning;
+using PilotTools.Common;
 using PilotTools.DataSources;
 using PilotTools.Helpers;
 using System;
@@ -80,7 +82,7 @@ namespace PilotTools.ViewModels
 
             try
             {
-                var airportsDB = (this.SourceManager.DataSources[DataSourceContent.Airports] as AirportSource).Directory; 
+                var airportsDB = this.SourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory; 
                 
                 if (favs.Count() > 0)
                 {
@@ -103,7 +105,7 @@ namespace PilotTools.ViewModels
 
         private async void LoadAroundMe()
         {
-            var airportsDB = (this.SourceManager.DataSources[DataSourceContent.Airports] as AirportSource).Directory;
+            var airportsDB = this.SourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
             var myPosition = await Helpers.Location.GetPosition();
 
             this.AroundMe = new ObservableCollection<IAirport>(await airportsDB.GetAirportsAroundAsync(myPosition, this.AroundMeRadius));
@@ -111,7 +113,7 @@ namespace PilotTools.ViewModels
 
         private async void LoadFlightPlans()
         {
-            var fpSource = this.SourceManager.DataSources[DataSourceContent.FlightPlans] as FlightPlanSource;
+            var fpSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
             await fpSource.LoadAsync();
             this.FlightPlans = new ObservableCollection<FlightPlan>(fpSource.FlightPlans);
         }

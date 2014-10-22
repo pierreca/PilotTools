@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PilotTools.DataSources
+namespace PilotTools.Common
 {
     public interface IDataSource
     {
         string Name { get; }
 
-        DataSourceType Type { get; }
+        DataSourceOrigin Type { get; }
 
         Task LoadAsync();
 

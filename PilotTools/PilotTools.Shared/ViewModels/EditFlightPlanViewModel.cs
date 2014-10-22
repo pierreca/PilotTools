@@ -6,6 +6,8 @@ using AirportData;
 using PilotTools.DataSources;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PilotTools.Common;
+using FlightPlanning;
 
 namespace PilotTools.ViewModels
 {
@@ -26,8 +28,8 @@ namespace PilotTools.ViewModels
                     return;
                 }
 
-                var airportSource = sourceManager.DataSources[DataSourceContent.Airports] as AirportSource;
-                var airport = airportSource.Directory.GetAirportData(this.newWayPointCode);
+                var airportDirectory = sourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
+                var airport = airportDirectory.GetAirportData(this.newWayPointCode);
                 var waypoints = this.FlightPlan.WayPoints.ToList();
                 waypoints.Add(airport);
                 this.FlightPlan.WayPoints = waypoints;
@@ -37,7 +39,7 @@ namespace PilotTools.ViewModels
 
             this.Save = new RelayCommand(async arg =>
             {
-                var fpDataSource = this.SourceManager.DataSources[DataSourceContent.FlightPlans] as FlightPlanSource;
+                var fpDataSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
                 await fpDataSource.LoadAsync();
                 var flightPlans = fpDataSource.FlightPlans.ToList();
                 flightPlans.Add(this.FlightPlan);

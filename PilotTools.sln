@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PilotTools", "PilotTools", "{EC7380C2-0103-4CDF-B64C-B102FD5383E4}"
 EndProject
@@ -37,6 +37,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENG.WMOCodes.Formatters.InfoFormatter", "..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Formatters.InfoFormatter\ENG.WMOCodes.Formatters.InfoFormatter.csproj", "{EA929CDB-B552-491B-B88E-11F4C43F13C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENG.WMOCodes.Formatters.ShortInfo", "..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes.Formatters.ShortInfo\ENG.WMOCodes.Formatters.ShortInfo.csproj", "{CB76CE16-F214-45B7-8C19-5FD2BF630D3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotTools.Common", "Libraries\PilotTools.Common\PilotTools.Common.csproj", "{BB3013BB-C2B6-476D-83DB-F4D967B13C74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightPlanning", "Libraries\FlightPlanning\FlightPlanning.csproj", "{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -239,6 +243,34 @@ Global
 		{CB76CE16-F214-45B7-8C19-5FD2BF630D3C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CB76CE16-F214-45B7-8C19-5FD2BF630D3C}.Release|x64.ActiveCfg = Release|Any CPU
 		{CB76CE16-F214-45B7-8C19-5FD2BF630D3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|x64.ActiveCfg = Release|Any CPU
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74}.Release|x86.ActiveCfg = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|x64.ActiveCfg = Release|Any CPU
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,5 +288,7 @@ Global
 		{CC0EE654-7007-40D8-8601-B45D18ABEF18} = {1B9EAF77-6D45-4C00-9C4D-42D2A0FA3950}
 		{EA929CDB-B552-491B-B88E-11F4C43F13C3} = {1B9EAF77-6D45-4C00-9C4D-42D2A0FA3950}
 		{CB76CE16-F214-45B7-8C19-5FD2BF630D3C} = {1B9EAF77-6D45-4C00-9C4D-42D2A0FA3950}
+		{BB3013BB-C2B6-476D-83DB-F4D967B13C74} = {68905E16-F340-40EF-8BDF-E3BBA4E67A97}
+		{4940EA5C-CF3C-43B4-8F98-839FA2E1C007} = {68905E16-F340-40EF-8BDF-E3BBA4E67A97}
 	EndGlobalSection
 EndGlobal

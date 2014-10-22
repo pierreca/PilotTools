@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PilotTools.DataSources
+namespace PilotTools.Common
 {
-    public enum DataSourceContent
+    public enum DataSourceContentType
     {
         Airports,
         FlightPlans,

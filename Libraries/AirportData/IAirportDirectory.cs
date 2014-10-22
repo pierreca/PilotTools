@@ -10,10 +10,8 @@ namespace AirportData
 {
     public interface IAirportDirectory
     {
-        Task DownloadAndSaveAsync();
         IAirport GetAirportData(string ICAO);
-        Task<IEnumerable<IAirport>> GetAirportsAroundAsync(BasicGeoposition position, int searchRadius);
-        Task LoadAsync();
 
+        Task<IEnumerable<IAirport>> GetAirportsAroundAsync(BasicGeoposition position, int searchRadius);
     }
 }

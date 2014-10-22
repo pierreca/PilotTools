@@ -34,7 +34,7 @@ namespace PilotTools.Views
         public AirportDetails()
         {
             this.InitializeComponent();
-            ViewModel = new AirportViewModel(App.Current.DataSourceManager);
+            ViewModel = new AirportViewModel(App.DataSourceManager);
 
             this.DataContext = ViewModel;
 

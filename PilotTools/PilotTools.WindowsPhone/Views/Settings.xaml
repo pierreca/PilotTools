@@ -20,19 +20,41 @@
     <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - SETTINGS">
         <PivotItem Header="database">
             <Grid>
-                <ListBox x:Name="lbDataSources" 
+                <ListView x:Name="lbDataSources" 
                          Background="Transparent"
-                         ItemsSource="{Binding DataSources}"
-                         SelectionChanged="lbDataSources_SelectionChanged">
-                    <ListBox.ItemTemplate>
+                         ItemsSource="{Binding DataSources}">
+                    <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Name}"
-                                     Foreground="White"
-                                     FontSize="36" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Name}"
+                                           VerticalAlignment="Center"
+                                           FontSize="24" />
+                                <Button Grid.Column="1"
+                                        Content="Download"
+                                        Command="{Binding Download}" 
+                                        Visibility="{Binding Downloadable, Converter={StaticResource BoolToVisibleConverter}}" />
+                                    
+                                <ProgressBar Grid.Row="1"
+                                             Grid.ColumnSpan="2"
+                                             IsIndeterminate="True"
+                                             Visibility="{Binding Downloading, Converter={StaticResource BoolToVisibleConverter}}" />
+                            </Grid>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
             </Grid>
         </PivotItem>
         <PivotItem Header="minimums">

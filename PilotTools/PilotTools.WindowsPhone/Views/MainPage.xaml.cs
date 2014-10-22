@@ -28,7 +28,7 @@ namespace PilotTools.Views
     public sealed partial class MainPage : Page
     {
         private NavigationHelper navigationHelper;
-        private AirportsPivotViewModel viewModel = new AirportsPivotViewModel(App.Current.DataSourceManager);
+        private AirportsPivotViewModel viewModel = new AirportsPivotViewModel(App.DataSourceManager);
 
         public MainPage()
         {

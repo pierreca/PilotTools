@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PilotTools</RootNamespace>
     <AssemblyName>PilotTools.Windows</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>en</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -111,6 +111,14 @@
     <ProjectReference Include="..\..\Libraries\AviationMath\AviationMath.csproj">
       <Project>{84a34c96-0d0b-4a01-bf34-e364c2809cef}</Project>
       <Name>AviationMath</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\FlightPlanning\FlightPlanning.csproj">
+      <Project>{4940ea5c-cf3c-43b4-8f98-839fa2e1c007}</Project>
+      <Name>FlightPlanning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\PilotTools.Common\PilotTools.Common.csproj">
+      <Project>{bb3013bb-c2b6-476d-83db-f4d967b13c74}</Project>
+      <Name>PilotTools.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\WeatherData\WeatherData.csproj">
       <Project>{6c770d4a-ecbe-4a7e-93d3-c870badce92e}</Project>

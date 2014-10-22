@@ -27,7 +27,7 @@ namespace PilotTools.Views
     public sealed partial class Settings : Page
     {
         private NavigationHelper navigationHelper;
-        private SettingsViewModel viewModel = new SettingsViewModel(App.Current.DataSourceManager);
+        private SettingsViewModel viewModel = new SettingsViewModel(App.DataSourceManager);
 
         public Settings()
         {
@@ -36,11 +36,6 @@ namespace PilotTools.Views
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-        }
-
-        private void lbDataSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Views.DataSourceView), ((sender as ListBox).SelectedItem as ListBoxItem).Content);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace PilotTools.ViewModels
             return this.canExecute(parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged = delegate { };
 
         public void Execute(object parameter)
         {

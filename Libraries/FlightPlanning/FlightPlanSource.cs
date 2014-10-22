@@ -1,16 +1,18 @@
-﻿using AirportData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using PilotTools.Common;
+using AirportData;
 using Windows.Storage;
 
-namespace PilotTools.DataSources
+namespace FlightPlanning
 {
-    class FlightPlanSource : IDataSource
+    public class FlightPlanSource : IDataSource
     {
         private const string DisplayName = "Flight Plans";
         private const string FileName = "FlightPlans.txt";
@@ -30,9 +32,9 @@ namespace PilotTools.DataSources
             get { return FlightPlanSource.DisplayName; }
         }
 
-        public DataSourceType Type
+        public DataSourceOrigin Type
         {
-            get { return DataSourceType.LocalOnly; }
+            get { return DataSourceOrigin.LocalOnly; }
         }
 
         public async Task LoadAsync()
@@ -64,7 +66,7 @@ namespace PilotTools.DataSources
 
                 this.FlightPlans = plans;
             }
-            catch (FileNotFoundException fnfex)
+            catch (FileNotFoundException)
             {
                 Debug.WriteLine("No flight plans file. Creating one.");
                 fileCreationNeeded = true;

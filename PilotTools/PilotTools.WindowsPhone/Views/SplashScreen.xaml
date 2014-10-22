@@ -8,14 +8,32 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="TextBlockStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
+    
     <Grid>
-        <StackPanel VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-            <TextBlock Text="Loading"/>
-            <TextBlock Text="{Binding LoadingPhase}"/>
-            <ProgressBar x:Name="loadingProgress"
-                         IsIndeterminate="True"
-                         Visibility="Visible" />
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1"
+                   Text="Loading"
+                   Style="{StaticResource TextBlockStyle}" />
+        <ProgressBar x:Name="loadingProgress"
+                     Grid.Row="2"
+                     Height="6"
+                     IsIndeterminate="True" />
+        <TextBlock Grid.Row="3"
+                   Text="{Binding LoadingPhase}"
+                   Style="{StaticResource TextBlockStyle}" />
     </Grid>
 </Page>

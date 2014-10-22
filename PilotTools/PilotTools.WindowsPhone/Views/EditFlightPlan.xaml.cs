@@ -99,7 +99,7 @@ namespace PilotTools.Views
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.DataContext = new EditFlightPlanViewModel(App.Current.DataSourceManager);
+            this.DataContext = new EditFlightPlanViewModel(App.DataSourceManager);
             this.navigationHelper.OnNavigatedTo(e);
         }
 

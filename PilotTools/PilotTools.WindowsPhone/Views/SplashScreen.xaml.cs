@@ -29,7 +29,7 @@ namespace PilotTools.Views
         {
             this.InitializeComponent();
 
-            this.ViewModel = new LoadingViewModel(App.Current.DataSourceManager);
+            this.ViewModel = new LoadingViewModel(App.DataSourceManager);
             this.DataContext = this.ViewModel;
 
         }

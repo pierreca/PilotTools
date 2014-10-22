@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using AviationMath;
+using PilotTools.Common;
 
 namespace AirportData.OurAirports
 {
     // TODO: LastUpdated field.
+    // TODO: I don't think we need PCLStorage, we could do with Windows.Storage, as in FlightPlanning.
     // TODO: Refactor to make it clear this is an implementation specific to ourairports.com
-    public class AirportDirectory : IAirportDirectory
+    public class AirportDirectory : IAirportDirectory, IDataSource
     {
         private const string AirportsCSV = "http://ourairports.com/data/airports.csv";
         private const string RunwaysCSV = "http://ourairports.com/data/runways.csv";
@@ -71,43 +73,6 @@ namespace AirportData.OurAirports
             }
 
             return newRunways;
-        }
-
-        /// <summary>
-        /// Downloads a new database of airports.
-        /// </summary>
-        public async Task DownloadAndSaveAsync()
-        {
-            var httpClient = new HttpClient();
-            var airportResponse = await httpClient.GetAsync(AirportsCSV);
-            var folder = FileSystem.Current.LocalStorage;
-
-            if (airportResponse.IsSuccessStatusCode)
-            {
-                using (var sr = new StreamReader(await airportResponse.Content.ReadAsStreamAsync()))
-                {
-                    var file = await folder.CreateFileAsync(AirportsFileName, CreationCollisionOption.ReplaceExisting);
-                    await file.WriteAllTextAsync(await sr.ReadToEndAsync());
-                }
-
-                var runwaysResponse = await httpClient.GetAsync(RunwaysCSV);
-                if (runwaysResponse.IsSuccessStatusCode)
-                {
-                    using (var sr = new StreamReader(await runwaysResponse.Content.ReadAsStreamAsync()))
-                    {
-                        var file = await folder.CreateFileAsync(RunwaysFileName, CreationCollisionOption.ReplaceExisting);
-                        await file.WriteAllTextAsync(await sr.ReadToEndAsync());
-                    }
-                }
-                else
-                {
-                    throw new AirportDirectoryException("Could not download runways from OurAirports.com");
-                }
-            }
-            else
-            {
-                throw new AirportDirectoryException("Could not download airports from OurAirports.com");
-            }
         }
 
         /// <summary>
@@ -184,7 +149,7 @@ namespace AirportData.OurAirports
 
             if (airportFileExists == ExistenceCheckResult.NotFound || runwayFileExists == ExistenceCheckResult.NotFound)
             {
-                await this.DownloadAndSaveAsync();
+                await this.DownloadAsync();
             }
             
             var cacheFile = await folder.GetFileAsync(AirportsFileName);
@@ -198,6 +163,50 @@ namespace AirportData.OurAirports
             using (var s = await cacheFile.OpenAsync(FileAccess.Read))
             {
                 this.runways = this.ParseRunwayData(s);
+            }
+        }
+
+        public string Name
+        {
+            get { return "OurAirports Directory"; }
+        }
+
+        public DataSourceOrigin Type
+        {
+            get { return DataSourceOrigin.OnlineWithCache; }
+        }
+
+        public async Task DownloadAsync()
+        {
+            var httpClient = new HttpClient();
+            var airportResponse = await httpClient.GetAsync(AirportsCSV);
+            var folder = FileSystem.Current.LocalStorage;
+
+            if (airportResponse.IsSuccessStatusCode)
+            {
+                using (var sr = new StreamReader(await airportResponse.Content.ReadAsStreamAsync()))
+                {
+                    var file = await folder.CreateFileAsync(AirportsFileName, CreationCollisionOption.ReplaceExisting);
+                    await file.WriteAllTextAsync(await sr.ReadToEndAsync());
+                }
+
+                var runwaysResponse = await httpClient.GetAsync(RunwaysCSV);
+                if (runwaysResponse.IsSuccessStatusCode)
+                {
+                    using (var sr = new StreamReader(await runwaysResponse.Content.ReadAsStreamAsync()))
+                    {
+                        var file = await folder.CreateFileAsync(RunwaysFileName, CreationCollisionOption.ReplaceExisting);
+                        await file.WriteAllTextAsync(await sr.ReadToEndAsync());
+                    }
+                }
+                else
+                {
+                    throw new AirportDirectoryException("Could not download runways from OurAirports.com");
+                }
+            }
+            else
+            {
+                throw new AirportDirectoryException("Could not download airports from OurAirports.com");
             }
         }
     }

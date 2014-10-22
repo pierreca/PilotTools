@@ -101,7 +101,7 @@ namespace PilotTools.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            this.DataContext = new SearchViewModel(App.Current.DataSourceManager);
+            this.DataContext = new SearchViewModel(App.DataSourceManager);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

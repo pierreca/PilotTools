@@ -5,16 +5,16 @@
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8F179180-030F-4877-8993-4CAC21D1BF64}</ProjectGuid>
+    <ProjectGuid>{BB3013BB-C2B6-476D-83DB-F4D967B13C74}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AirportData</RootNamespace>
-    <AssemblyName>AirportData</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <RootNamespace>PilotTools.Common</RootNamespace>
+    <AssemblyName>PilotTools.Common</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,43 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
-    <TargetPlatform Include="Windows, Version=8.1" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirportType.cs" />
-    <Compile Include="FlightPlan.cs" />
-    <Compile Include="IAirport.cs" />
-    <Compile Include="OurAirports\Airport.cs" />
-    <Compile Include="AirportDirectoryException.cs" />
-    <Compile Include="IAirportDirectory.cs" />
-    <Compile Include="OurAirports\AirportDirectory.cs" />
-    <Compile Include="OurAirports\Runway.cs" />
+    <Compile Include="DataLoadedEventArgs.cs" />
+    <Compile Include="DataSourceContentType.cs" />
+    <Compile Include="DataSourceOrigin.cs" />
+    <Compile Include="IDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadioFrequencyType.cs" />
-    <Compile Include="IRunway.cs" />
-    <Compile Include="RunwayEnd.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AviationMath\AviationMath.csproj">
-      <Project>{84a34c96-0d0b-4a01-bf34-e364c2809cef}</Project>
-      <Name>AviationMath</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PilotTools.Common\PilotTools.Common.csproj">
-      <Project>{bb3013bb-c2b6-476d-83db-f4d967b13c74}</Project>
-      <Name>PilotTools.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PCLStorage">
-      <HintPath>..\..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

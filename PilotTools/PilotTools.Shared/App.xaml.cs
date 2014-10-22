@@ -26,9 +26,7 @@ namespace PilotTools
     /// </summary>
     public sealed partial class App : Application
     {
-        public static App Current;
-
-        public IDataSourceManager DataSourceManager { get; set; }
+        public static IDataSourceManager DataSourceManager { get; set; }
 
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
@@ -42,9 +40,7 @@ namespace PilotTools
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-            this.DataSourceManager = new DataSourceManager();
-
-            Current = this;
+            App.DataSourceManager = new DataSourceManager();
         }
 
         /// <summary>
