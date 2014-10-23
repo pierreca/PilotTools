@@ -20,7 +20,7 @@ namespace PilotTools.ViewModels
         private bool hasMetar;
         private Geopoint mapCenter;
         private Metar metar;
-        private bool meetsPersonalMinimums;
+        private PersonalMinimumsResult meetsPersonalMinimums;
 
         public AirportViewModel(IDataSourceManager sourceManager)
             : base(sourceManager)
@@ -54,10 +54,10 @@ namespace PilotTools.ViewModels
             set { this.SetProperty<Geopoint>(ref this.mapCenter, value); }
         }
 
-        public bool MeetsPersonalMinimums
+        public PersonalMinimumsResult MeetsPersonalMinimums
         {
             get { return this.meetsPersonalMinimums; }
-            set { this.SetProperty<bool>(ref this.meetsPersonalMinimums, value); }
+            set { this.SetProperty<PersonalMinimumsResult>(ref this.meetsPersonalMinimums, value); }
         }
 
         public Metar Metar
@@ -80,22 +80,18 @@ namespace PilotTools.ViewModels
                 {
                     var decoder = new WeatherData.MetarDecoder();
                     this.Metar = await decoder.GetMetarAsync(airportCode);
-                    if(this.Metar.IsValid)
-                    {
-                        this.HasMetar = true;
-                    }
+                    this.HasMetar = true;
                 }
 
                 this.MeetsPersonalMinimums = await this.CheckPersonalMinimums();
             }
             catch(Exception ex)
             {
-                // TODO: Surface this error to the UI differently
-                Debug.WriteLine("Failed to query airport data source: " + ex.Message);
+                this.HasMetar = false;
             }
         }
 
-        public async Task<bool> CheckPersonalMinimums()
+        public async Task<PersonalMinimumsResult> CheckPersonalMinimums()
         {
             var minimums = await PersonalMinimums.LoadAsync();
             var OK = false;
@@ -115,16 +111,17 @@ namespace PilotTools.ViewModels
             }
             else
             {
-                return false;
+                return PersonalMinimumsResult.Fail;
             }
 
             if (this.HasMetar)
             {
                 // TODO: fix magnetic deviation and speed vs gust speeds, variability, and multiple runways. 
                 var windComponents = CrossWindComponents.CreateFromMetarData(this.Metar.Wind.Direction, this.Metar.Wind.Speed, this.airport.Runways.First().Id, 0.0);
+                
             }
 
-            return true;
+            return PersonalMinimumsResult.Unknown;
         }
     }
 }

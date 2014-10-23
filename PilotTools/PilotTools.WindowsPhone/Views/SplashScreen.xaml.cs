@@ -41,8 +41,25 @@ namespace PilotTools.Views
         /// This parameter is typically used to configure the page.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await this.ViewModel.StartLoading();
-            this.Frame.Navigate(typeof(MainPage));
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var termsAcceptedBefore = localSettings.Values["DoNotShowTermsOfUse"];
+
+            if (App.TermsOfUseAccepted || (termsAcceptedBefore != null && (bool)termsAcceptedBefore))
+            {
+                await this.ViewModel.StartLoading();
+
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    this.Frame.Navigate(typeof(MainPage));
+                });
+            }
+            else 
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    this.Frame.Navigate(typeof(TermsOfUse));
+                });
+            }
         }
     }
 }

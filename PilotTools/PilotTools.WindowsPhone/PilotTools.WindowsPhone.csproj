@@ -111,6 +111,9 @@
     <Compile Include="Views\AirportDetails.xaml.cs">
       <DependentUpon>AirportDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TermsOfUse.xaml.cs">
+      <DependentUpon>TermsOfUse.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditFlightPlan.xaml.cs">
       <DependentUpon>EditFlightPlan.xaml</DependentUpon>
     </Compile>
@@ -144,6 +147,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AirportDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TermsOfUse.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

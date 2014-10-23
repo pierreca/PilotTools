@@ -20,12 +20,15 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToCollapsedConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\PersonalMinimumsResultToTextConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\PersonalMinimumsResultToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FlightRulesToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataSources\DataSourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataSources\IDataSourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Favorites.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimumsResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SystemHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportsPivotViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportViewModel.cs" />

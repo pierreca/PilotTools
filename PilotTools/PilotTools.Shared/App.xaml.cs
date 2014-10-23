@@ -27,6 +27,7 @@ namespace PilotTools
     public sealed partial class App : Application
     {
         public static IDataSourceManager DataSourceManager { get; set; }
+        public static bool TermsOfUseAccepted = false;
 
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;

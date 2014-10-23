@@ -7,7 +7,9 @@
     <conv:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
     <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     <conv:FlightRulesToBrushConverter x:Key="FlightRulesToBrushConverter" />
-
+    <conv:PersonalMinimumsResultToBrushConverter x:Key="PersonalMinimumsResultToBrushConverter" />
+    <conv:PersonalMinimumsResultToTextConverter x:Key="PersonalMinimumsResultToTextConverter" />
+    
 
     <DataTemplate x:Key="AirportItemTemplate">
         <Grid>
@@ -15,6 +17,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+
+            <Border Grid.RowSpan="2"
+                    BorderBrush="White"
+                    BorderThickness="0,1"
+                    Opacity=".5"/>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -26,19 +33,20 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
-                <TextBlock FontSize="28"
-                           Margin="0,0,10,0"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           FontWeight="Bold"
-                           Text="{Binding Airport.ICAO}" />
-
+                    
+                    <TextBlock FontSize="32"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               FontWeight="Bold"
+                               Text="{Binding Airport.ICAO}" />
+                
                 <Border Grid.Column="1"
-                        Background="Red"
-                        Visibility="{Binding MeetsPersonalMinimums, Converter={StaticResource BoolToCollapsedConverter}}">
+                        Background="{Binding MeetsPersonalMinimums, Converter={StaticResource PersonalMinimumsResultToBrushConverter}}">
                     <TextBlock Grid.Column="2"
-                               Text="Minimums!"
+                               Text="{Binding MeetsPersonalMinimums, Converter={StaticResource PersonalMinimumsResultToTextConverter}}"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="16" />
@@ -117,7 +125,6 @@
 
                 <ListView Grid.Row="3"
                              Grid.Column="1"
-                             Background="Black"
                              Foreground="White"
                              IsHitTestVisible="False"
                              ItemsSource="{Binding Metar.Clouds}">
@@ -150,6 +157,7 @@
 
     <Style x:Key="AirportContainerStyle" TargetType="ListViewItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="0,0,0,10" />
     </Style>
     
     <DataTemplate x:Key="RunwayItemTemplate">

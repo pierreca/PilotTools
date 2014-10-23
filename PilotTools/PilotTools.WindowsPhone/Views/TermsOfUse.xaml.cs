@@ -1,5 +1,4 @@
 ﻿using PilotTools.Common;
-using PilotTools.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,12 +23,12 @@ namespace PilotTools.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Settings : Page
+    public sealed partial class TermsOfUse : Page
     {
         private NavigationHelper navigationHelper;
-        private SettingsViewModel viewModel = new SettingsViewModel(App.DataSourceManager);
+        private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public Settings()
+        public TermsOfUse()
         {
             this.InitializeComponent();
 
@@ -50,9 +49,9 @@ namespace PilotTools.Views
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
-        public SettingsViewModel ViewModel
+        public ObservableDictionary DefaultViewModel
         {
-            get { return this.viewModel; }
+            get { return this.defaultViewModel; }
         }
 
         /// <summary>
@@ -66,10 +65,8 @@ namespace PilotTools.Views
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            await this.ViewModel.LoadAsync();
-            this.DataContext = this.ViewModel;
         }
 
         /// <summary>
@@ -80,9 +77,8 @@ namespace PilotTools.Views
         /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
         /// <param name="e">Event data that provides an empty dictionary to be populated with
         /// serializable state.</param>
-        private async void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            await this.ViewModel.SaveSettings();
         }
 
         #region NavigationHelper registration
@@ -103,6 +99,11 @@ namespace PilotTools.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var termsAcceptedBefore = localSettings.Values["DoNotShowTermsOfUse"];
+
+            this.cbDontShowAgain.IsChecked = (termsAcceptedBefore != null && (bool)termsAcceptedBefore);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -112,15 +113,14 @@ namespace PilotTools.Views
 
         #endregion
 
-        private void btnTermsOfUse_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(TermsOfUse));
-        }
-
-        private void btnClearSettings_Click(object sender, RoutedEventArgs e)
+        private void btnAccept_Click(object sender, RoutedEventArgs e)
         {
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values.Clear();
+
+            localSettings.Values["DoNotShowTermsOfUse"] = this.cbDontShowAgain.IsChecked == true;
+
+            App.TermsOfUseAccepted = true;
+            this.Frame.Navigate(typeof(SplashScreen));
         }
     }
 }

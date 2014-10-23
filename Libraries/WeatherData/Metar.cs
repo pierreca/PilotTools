@@ -24,7 +24,7 @@ namespace WeatherData
         { 
             get
             {
-                if(applicableFlightRules == FlightRules.UNKNOWN)
+                if(applicableFlightRules == FlightRules.UNKNOWN && this.IsValid)
                 {
                     applicableFlightRules = this.ComputeFlightRules();
                 }

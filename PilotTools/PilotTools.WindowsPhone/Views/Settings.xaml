@@ -102,9 +102,19 @@
                          Text="{Binding Minimums.RunwayWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </PivotItem>
-        <PivotItem Header="location">
+        <PivotItem Header="permissions">
             <StackPanel>
-                <ToggleButton x:Name="tglLocationServices" Content="allow use of current location" />
+                <ToggleButton x:Name="tglLocationServices" 
+                              HorizontalAlignment="Stretch"
+                              Content="allow use of current location" />
+                <Button x:Name="btnTermsOfUse"
+                        HorizontalAlignment="Stretch"
+                        Content="Show Terms of Use" 
+                        Click="btnTermsOfUse_Click"/>
+                <Button x:Name="btnClearSettings"
+                        HorizontalAlignment="Stretch"
+                        Content="Clear Local Settings"
+                        Click="btnClearSettings_Click" />
             </StackPanel>
         </PivotItem>
         <PivotItem Header="credits">
