@@ -27,17 +27,11 @@ namespace PilotTools.Views
     public sealed partial class AirportDetails : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        public AirportViewModel ViewModel { get; set; }
 
         public AirportDetails()
         {
             this.InitializeComponent();
-            ViewModel = new AirportViewModel(App.DataSourceManager);
-
-            this.DataContext = ViewModel;
-
+        
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -49,15 +43,6 @@ namespace PilotTools.Views
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
         }
 
         /// <summary>
@@ -104,8 +89,6 @@ namespace PilotTools.Views
         /// handlers that cannot cancel the navigation request.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var airportCode = e.Parameter as string;
-            await this.ViewModel.LoadAirportDataAsync(airportCode);
             this.navigationHelper.OnNavigatedTo(e);
         }
 

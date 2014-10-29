@@ -4,17 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirportData
+using AirportData;
+
+namespace FlightPlanning
 {
     public class FlightPlan
     {
         private const char Separator = ',';
         public FlightPlan()
         {
-            this.WayPoints = new List<IAirport>();
+            this.Waypoints = new List<IAirport>();
         }
 
-        public IEnumerable<IAirport> WayPoints { get; set; }
+        public IEnumerable<IAirport> Waypoints { get; set; }
+
+        public void AddWaypoint(IAirport airport)
+        {
+            var wps = this.Waypoints.ToList();
+            wps.Add(airport);
+            this.Waypoints = wps;
+        }
 
         public static FlightPlan FromString(string s, IAirportDirectory directory)
         {
@@ -26,7 +35,7 @@ namespace AirportData
             }
 
             var wpTable = s.Split(Separator);
-            retval.WayPoints = wpTable.Select(wp => directory.GetAirportData(wp));
+            retval.Waypoints = wpTable.Select(wp => directory.GetAirportData(wp));
 
             return retval;
         }
@@ -34,7 +43,7 @@ namespace AirportData
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var wp in WayPoints)
+            foreach (var wp in Waypoints)
             {
                 sb.Append(wp.ICAO + Separator);
             }

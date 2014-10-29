@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    DataContext="{Binding EditFlightPlanViewModel, Source={StaticResource ViewModelLocator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="LayoutRoot">
@@ -24,39 +25,40 @@
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
             <TextBlock Text="PILOT TOOLS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="edit flight plan" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding FlightPlan.Name}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="tbSearch"
-                         Margin="24,0"
-                         Text="{Binding NewWayPointCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         VerticalAlignment="Center"
-                         Width="100" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBox x:Name="tbSearch"
+                     Grid.Row="1"
+                     Margin="24,0,12,0"
+                     Text="{Binding NewWayPointCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center" />
 
-                    <Button x:Name="BtnAddWaypoint"
-                        Content="Add Waypoint"
-                        Command="{Binding AddWaypoint}"  />
-                </StackPanel>
-                
-                <ListBox x:Name="lbWayPoints"
-                                Background="Transparent"
-                                ItemsSource="{Binding FlightPlan.WayPoints}"
-                                Foreground="White"
-                                Margin="24,0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <TextBox Text="{Binding ICAO}"
-                                         FontSize="36"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
+            <Button x:Name="BtnAddWaypoint"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Command="{Binding AddWaypoint}"
+                    Content="Add Waypoint"
+                    HorizontalAlignment="Right"  
+                    Margin="0,0,24,0"/>
+
+            <ListView x:Name="lvWaypoints"
+                      Grid.ColumnSpan="2"
+                      ItemsSource="{Binding FlightPlan.Waypoints}"
+                      ItemTemplate="{StaticResource AirportItemTemplate}"
+                      ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                      Margin="24,0" />
         </Grid>
     </Grid>
     <Page.BottomAppBar>

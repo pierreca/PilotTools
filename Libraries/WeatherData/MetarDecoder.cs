@@ -15,22 +15,27 @@ namespace WeatherData
         {
             var retriever = new ENG.WMOCodes.Downloaders.Retrievers.Metar.NoaaGovRetriever();
             var result = await Downloader.DownloadAsync(icao, retriever);
-            var decoder = new ENG.WMOCodes.Decoders.MetarDecoder();
-            ENG.WMOCodes.Codes.Metar metar = null;
-            
-            try
-            {
-                metar = decoder.Decode(result.Result);
-            }
-            catch (ENG.WMOCodes.Decoders.Internal.DecodeException)
-            {
-
-            }
-
             var ret = new Metar();
 
-            if (result.IsSuccessful)
+            if (!result.IsSuccessful)
             {
+                ret.IsValid = false;
+                ret.MetarObj = null;
+            }
+            else
+            {
+                var decoder = new ENG.WMOCodes.Decoders.MetarDecoder();
+                ENG.WMOCodes.Codes.Metar metar = null;
+
+                try
+                {
+                    metar = decoder.Decode(result.Result);
+                }
+                catch (ENG.WMOCodes.Decoders.Internal.DecodeException)
+                {
+
+                }
+
                 ret.Raw = result.Result;
 
                 if (metar == null)

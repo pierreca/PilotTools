@@ -49,6 +49,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlightPlan.cs" />
     <Compile Include="FlightPlanSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

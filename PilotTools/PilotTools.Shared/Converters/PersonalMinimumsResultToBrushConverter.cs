@@ -15,15 +15,15 @@ namespace PilotTools.Converters
         {
             var result = new SolidColorBrush(Colors.Gray);
 
-            switch ((PersonalMinimumsResult)value)
+            switch ((PersonalMinimumVerificationResult)value)
             {
-                case PersonalMinimumsResult.Pass:
+                case PersonalMinimumVerificationResult.Pass:
                     result = new SolidColorBrush(Colors.Green);
                     break;
-                case PersonalMinimumsResult.Fail:
+                case PersonalMinimumVerificationResult.Fail:
                     result = new SolidColorBrush(Colors.Red);
                     break;
-                case PersonalMinimumsResult.Unknown:
+                case PersonalMinimumVerificationResult.Unknown:
                     result = new SolidColorBrush(Colors.SlateGray);
                     break;
             }

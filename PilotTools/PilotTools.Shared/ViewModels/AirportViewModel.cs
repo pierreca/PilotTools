@@ -20,7 +20,7 @@ namespace PilotTools.ViewModels
         private bool hasMetar;
         private Geopoint mapCenter;
         private Metar metar;
-        private PersonalMinimumsResult meetsPersonalMinimums;
+        private Dictionary<string, PersonalMinimumVerificationResult> personalMinimumResults;
 
         public AirportViewModel(IDataSourceManager sourceManager)
             : base(sourceManager)
@@ -54,16 +54,16 @@ namespace PilotTools.ViewModels
             set { this.SetProperty<Geopoint>(ref this.mapCenter, value); }
         }
 
-        public PersonalMinimumsResult MeetsPersonalMinimums
-        {
-            get { return this.meetsPersonalMinimums; }
-            set { this.SetProperty<PersonalMinimumsResult>(ref this.meetsPersonalMinimums, value); }
-        }
-
         public Metar Metar
         {
             get { return this.metar; }
             set { this.SetProperty<Metar>(ref this.metar, value); }
+        }
+
+        public Dictionary<string, PersonalMinimumVerificationResult> PersonalMinimumResults
+        {
+            get { return this.personalMinimumResults; }
+            set { this.SetProperty<Dictionary<string, PersonalMinimumVerificationResult>>(ref this.personalMinimumResults, value); }
         }
 
         public RelayCommand AddFavorite { get; set; }
@@ -83,45 +83,74 @@ namespace PilotTools.ViewModels
                     this.HasMetar = true;
                 }
 
-                this.MeetsPersonalMinimums = await this.CheckPersonalMinimums();
+                this.PersonalMinimumResults = await this.CheckPersonalMinimums();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 this.HasMetar = false;
             }
         }
 
-        public async Task<PersonalMinimumsResult> CheckPersonalMinimums()
+        public async Task<Dictionary<string, PersonalMinimumVerificationResult>> CheckPersonalMinimums()
         {
+            Dictionary<string, PersonalMinimumVerificationResult> results = new Dictionary<string, PersonalMinimumVerificationResult>();
+            results.Add("Visibility", PersonalMinimumVerificationResult.Unknown);
+            results.Add("Ceiling", PersonalMinimumVerificationResult.Unknown);
+            results.Add("Runway", PersonalMinimumVerificationResult.Unknown);
+            results.Add("Crosswind", PersonalMinimumVerificationResult.Unknown);
+
+
             var minimums = await PersonalMinimums.LoadAsync();
-            var OK = false;
 
-            foreach (var rwy in this.airport.Runways)
-            {
-                if (!rwy.Closed && rwy.Length > minimums.RunwayLength && rwy.Width > minimums.RunwayWidth)
-                {
-                    OK = true;
-                    break;
-                }
-            }
+            results["Visibility"] = this.Metar.Visibility.IsOver(minimums.Visibility);
 
-            if (OK)
+            if(this.Metar.Clouds.Any(cl => cl.IsCeiling))
             {
-                OK = false;
+                var ceiling = this.Metar.Clouds.Where(cl => cl.IsCeiling)
+                                               .OrderBy(cl => cl.Altitude)
+                                               .First();
+
+                results["Ceiling"] = ceiling.Altitude.IsOver(minimums.Ceiling);
             }
             else
             {
-                return PersonalMinimumsResult.Fail;
+                results["Ceiling"] = PersonalMinimumVerificationResult.Pass;
+            }
+
+            var passRunway = this.Airport.Runways.Where(rwy => rwy.Length.IsOver(minimums.RunwayLength) == PersonalMinimumVerificationResult.Pass
+                                                               && rwy.Width.IsOver(minimums.RunwayWidth) == PersonalMinimumVerificationResult.Pass
+                                                               && !rwy.Closed);
+            var warningRunway = this.Airport.Runways.Where(rwy => rwy.Length.IsOver(minimums.RunwayLength) != PersonalMinimumVerificationResult.Fail
+                                                                  && rwy.Width.IsOver(minimums.RunwayWidth) != PersonalMinimumVerificationResult.Fail
+                                                                  && !rwy.Closed);
+            if(passRunway.Any())
+            {
+                results["Runway"] = PersonalMinimumVerificationResult.Pass;
+            }
+            else if(warningRunway.Any())
+            {
+                results["Runway"] = PersonalMinimumVerificationResult.Warning;
+            }
+            else
+            {
+                results["Runway"] = PersonalMinimumVerificationResult.Fail;
             }
 
             if (this.HasMetar)
             {
-                // TODO: fix magnetic deviation and speed vs gust speeds, variability, and multiple runways. 
-                var windComponents = CrossWindComponents.CreateFromMetarData(this.Metar.Wind.Direction, this.Metar.Wind.Speed, this.airport.Runways.First().Id, 0.0);
-                
+                foreach (var rwy in passRunway)
+                {
+                    var windComponents = CrossWindComponents.CreateFromMetarData(this.Metar.Wind.Direction, this.Metar.Wind.Speed, rwy.End1.Heading);
+                    results["Crosswind"] = minimums.Crosswind.IsOver(windComponents.Crosswind);
+
+                    if (results["Crosswind"] == PersonalMinimumVerificationResult.Pass)
+                    {
+                        break;
+                    }
+                }
             }
 
-            return PersonalMinimumsResult.Unknown;
+            return results;
         }
     }
 }

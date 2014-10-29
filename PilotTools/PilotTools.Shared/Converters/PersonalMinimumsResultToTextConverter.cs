@@ -15,15 +15,15 @@ namespace PilotTools.Converters
         {
             var result = string.Empty;
 
-            switch ((PersonalMinimumsResult)value)
+            switch ((PersonalMinimumVerificationResult)value)
             {
-                case PersonalMinimumsResult.Pass:
+                case PersonalMinimumVerificationResult.Pass:
                     result = "Minimums OK";
                     break;
-                case PersonalMinimumsResult.Fail:
+                case PersonalMinimumVerificationResult.Fail:
                     result = "Under Minimums";
                     break;
-                case PersonalMinimumsResult.Unknown:
+                case PersonalMinimumVerificationResult.Unknown:
                     result = "Cannot Verify Minimums";
                     break;
             }

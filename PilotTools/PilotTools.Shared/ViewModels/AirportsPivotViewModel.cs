@@ -19,9 +19,7 @@ namespace PilotTools.ViewModels
 
         private ObservableCollection<AirportViewModel> favorites;
         private ObservableCollection<IAirport> aroundMe;
-
-        private ObservableCollection<FlightPlan> flightPlans;
-
+        private ObservableCollection<FlightPlanViewModel> flightPlans;
         private bool hasNetwork;
         private string searchCode;
 
@@ -56,10 +54,10 @@ namespace PilotTools.ViewModels
             set { this.SetProperty<ObservableCollection<AirportViewModel>>(ref this.favorites, value); }
         }
 
-        public ObservableCollection<FlightPlan> FlightPlans
+        public ObservableCollection<FlightPlanViewModel> FlightPlans
         {
             get { return this.flightPlans; }
-            set { this.SetProperty<ObservableCollection<FlightPlan>>(ref this.flightPlans, value); }
+            set { this.SetProperty<ObservableCollection<FlightPlanViewModel>>(ref this.flightPlans, value); }
         }
 
         public bool HasNetwork
@@ -115,7 +113,12 @@ namespace PilotTools.ViewModels
         {
             var fpSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
             await fpSource.LoadAsync();
-            this.FlightPlans = new ObservableCollection<FlightPlan>(fpSource.FlightPlans);
+            this.FlightPlans = new ObservableCollection<FlightPlanViewModel>();
+            
+            foreach (var fp in fpSource.FlightPlans)
+            {
+                this.FlightPlans.Add(await FlightPlanViewModel.CreateAsync(fp));
+            }
         }
     }
 }

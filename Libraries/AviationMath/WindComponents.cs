@@ -22,12 +22,11 @@ namespace AviationMath
 
         public CrosswindDirection CrossWindDirection { get; set; }
 
-        public static CrossWindComponents CreateFromMetarData(int WindFrom, int WindSpeed, int RunwayNumber, double magneticDeviation)
+        public static CrossWindComponents CreateFromMetarData(int WindFrom, int WindSpeed, int runwayHeading)
         {
             var result = new CrossWindComponents();
 
-            var trueRwyHdg = RunwayNumber * 10 + magneticDeviation;
-            var windRelativeAngle = WindFrom - trueRwyHdg;
+            var windRelativeAngle = WindFrom - runwayHeading;
 
             if (windRelativeAngle < 0)
             {
@@ -55,6 +54,26 @@ namespace AviationMath
             }
 
             result.Crosswind = (int)Math.Abs(Math.Round(Math.Sin(windRelativeAngle * Math.PI / 180.0) * WindSpeed));
+
+            return result;
+        }
+
+        public CrossWindComponents Invert()
+        {
+            var result = new CrossWindComponents();
+            result.Crosswind = this.Crosswind;
+            switch(this.CrossWindDirection)
+            {
+                case CrosswindDirection.FromLeft:
+                    result.CrossWindDirection = CrosswindDirection.FromRight;
+                    break;
+                case CrosswindDirection.FromRight:
+                    result.CrossWindDirection = CrosswindDirection.FromLeft;
+                    break;
+            }
+
+            result.Tailwind = this.Headwind;
+            result.Headwind = this.Tailwind;
 
             return result;
         }

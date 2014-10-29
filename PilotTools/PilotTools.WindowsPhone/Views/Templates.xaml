@@ -8,8 +8,6 @@
     <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     <conv:FlightRulesToBrushConverter x:Key="FlightRulesToBrushConverter" />
     <conv:PersonalMinimumsResultToBrushConverter x:Key="PersonalMinimumsResultToBrushConverter" />
-    <conv:PersonalMinimumsResultToTextConverter x:Key="PersonalMinimumsResultToTextConverter" />
-    
 
     <DataTemplate x:Key="AirportItemTemplate">
         <Grid>
@@ -31,7 +29,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                     
                     <TextBlock FontSize="32"
@@ -41,18 +38,8 @@
                                FontWeight="Bold"
                                Text="{Binding Airport.ICAO}" />
                 
-                <Border Grid.Column="1"
-                        Background="{Binding MeetsPersonalMinimums, Converter={StaticResource PersonalMinimumsResultToBrushConverter}}">
-                    <TextBlock Grid.Column="2"
-                               Text="{Binding MeetsPersonalMinimums, Converter={StaticResource PersonalMinimumsResultToTextConverter}}"
-                               TextWrapping="Wrap"
-                               TextAlignment="Center"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="16" />
-                </Border>
 
-                <Border Grid.Column="2"
+                <Border Grid.Column="1"
                         Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
                     <TextBlock Text="{Binding Metar.ApplicableFlightRules}"
                                HorizontalAlignment="Center"
@@ -79,22 +66,22 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Wind: " 
-                               FontSize="18"/>
+                <!-- Wind -->
+                <TextBlock Text="Wind: "
+                           Foreground="{Binding PersonalMinimumResults[Crosswind], Converter={StaticResource PersonalMinimumsResultToBrushConverter}}"
+                           FontSize="18"/>
+
+                    <TextBlock Grid.Column="1"
+                           Text="{Binding Metar.Wind}" 
+                           FontSize="18" />
+
+
+                    <!-- Temperatures -->
                 <TextBlock Grid.Row="1" 
                                Text="Temperature: " 
                                FontSize="18"
                                Margin="0,0,10,0"/>
-                <TextBlock Grid.Row="2" 
-                               Text="Visibility: " 
-                               FontSize="18" />
-                <TextBlock Grid.Row="3" 
-                               Text="Clouds: " 
-                               FontSize="18" />
 
-                <TextBlock Grid.Column="1"
-                               Text="{Binding Metar.Wind}" 
-                               FontSize="18" />
 
                 <StackPanel Grid.Column="1"
                                 Grid.Row="1"
@@ -109,33 +96,45 @@
                                FontSize="18"
                                TextWrapping="Wrap"/>
                 </StackPanel>
+                
+                <!-- Visibility -->
+                <TextBlock Grid.Row="2" 
+                           Foreground="{Binding PersonalMinimumResults[Visibility], Converter={StaticResource PersonalMinimumsResultToBrushConverter}}"
+                           Text="Visibility: " 
+                           FontSize="18" />
 
                 <StackPanel Grid.Column="1"
-                                Grid.Row="2"
-                               Orientation="Horizontal">
+                            Grid.Row="2"
+                            Orientation="Horizontal">
 
                     <TextBlock Text="{Binding Metar.Visibility}" 
                                FontSize="16"
                                TextWrapping="Wrap"/>
 
                     <TextBlock Text="SM"
-                                   FontSize="16"
-                                   Margin="5,0" />
+                               FontSize="16"
+                               Margin="5,0" />
                 </StackPanel>
 
+                <!-- Clouds -->
+                <TextBlock Grid.Row="3" 
+                           Foreground="{Binding PersonalMinimumResults[Ceiling], Converter={StaticResource PersonalMinimumsResultToBrushConverter}}"
+                           Text="Clouds: " 
+                           FontSize="18" />
+                
                 <ListView Grid.Row="3"
-                             Grid.Column="1"
-                             Foreground="White"
-                             IsHitTestVisible="False"
-                             ItemsSource="{Binding Metar.Clouds}">
+                          Grid.Column="1"
+                          Foreground="White"
+                          IsHitTestVisible="False"
+                          ItemsSource="{Binding Metar.Clouds}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontSize="16"
-                                               Text="{Binding Type}" />
+                                           Text="{Binding Type}" />
                                 <TextBlock FontSize="16" 
-                                               Text="{Binding Altitude}"
-                                               Margin="5,0" />
+                                           Text="{Binding Altitude}"
+                                           Margin="5,0" />
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -189,4 +188,33 @@
         <Setter Property="FontSize" Value="20" />
     </Style>
 
+    <DataTemplate x:Key="WaypointDataTemplate">
+        <Border Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
+            <TextBlock Text="{Binding Airport.ICAO}"
+                       FontSize="22"
+                       HorizontalAlignment="Center"
+                       Margin="5,0" 
+                       VerticalAlignment="Center"/>
+        </Border>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="FlightPlanDataTemplate">
+        <Grid>
+            <ListView ItemsSource="{Binding Waypoints}"
+                      ItemTemplate="{StaticResource WaypointDataTemplate}"
+                      IsHitTestVisible="False">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+    </DataTemplate>
+    
+    <Style x:Key="FlightPlanContainerStyle" TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+        
 </ResourceDictionary>

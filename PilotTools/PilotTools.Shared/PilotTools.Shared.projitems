@@ -27,18 +27,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataSources\IDataSourceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Favorites.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Location.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimumHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimums.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimumsResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PersonalMinimumVerificationResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SystemHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportsPivotViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AirportViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DataSourceViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\EditFlightPlanViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FlightPlanViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoadingViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SearchViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Controls\AirportDiagram.xaml">

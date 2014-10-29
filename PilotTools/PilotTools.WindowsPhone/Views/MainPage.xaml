@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-	d:DataContext="{d:DesignData /SampleData/AirportsPivotViewModelSampleData.xaml}">
+    DataContext="{Binding AirportsPivotViewModel, Source={StaticResource ViewModelLocator}}">
     
 
     <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - AIRPORTS">
@@ -25,23 +25,25 @@
                            FontWeight="Bold"
                            Foreground="White"/>
                 </Border>
-                <ListView x:Name="lbFavorites" 
+                <ListView x:Name="lvFavorites" 
                           Grid.Row="1"
                           Background="Transparent"
                           Foreground="White"
                           ItemsSource="{Binding Favorites}"
                           ItemContainerStyle="{StaticResource AirportContainerStyle}"
                           ItemTemplate="{StaticResource AirportItemTemplate}"
-                          SelectionChanged="lbFavorites_SelectionChanged"
+                          SelectionChanged="lvAirports_SelectionChanged"
                           FontSize="36" />
             </Grid>
         </PivotItem>
         <PivotItem Header="flight plans">
-            <ListView x:Name="lbFlightPlans"
+            <ListView x:Name="lvFlightPlans"
                       Background="Transparent"
                       Foreground="White"
                       ItemsSource="{Binding FlightPlans}"
-                      SelectionChanged="lbFlightPlans_SelectionChanged"
+                      ItemContainerStyle="{StaticResource FlightPlanContainerStyle}"
+                      ItemTemplate="{StaticResource FlightPlanDataTemplate}"
+                      SelectionChanged="lvFlightPlans_SelectionChanged"
                       FontSize="36" />
         </PivotItem>
         <PivotItem Header="around me">
@@ -50,7 +52,7 @@
                       ItemsSource="{Binding AroundMe}"
                       DisplayMemberPath="ICAO"
                       Foreground="White"
-                      SelectionChanged="lbAroundMe_SelectionChanged"
+                      SelectionChanged="lvAirports_SelectionChanged"
                       FontSize="36" />
         </PivotItem>
     </Pivot>

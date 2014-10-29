@@ -13,13 +13,13 @@ namespace PilotTools.ViewModels
 {
     public class EditFlightPlanViewModel : ViewModelBase
     {
-        private FlightPlan flightPlan;
+        private FlightPlanViewModel flightPlan;
         private string newWayPointCode;
 
         public EditFlightPlanViewModel(IDataSourceManager sourceManager)
             : base(sourceManager)
         {
-            this.FlightPlan = new FlightPlan();
+            this.FlightPlan = flightPlan;
 
             this.AddWaypoint = new RelayCommand(arg =>
             {
@@ -28,30 +28,26 @@ namespace PilotTools.ViewModels
                     return;
                 }
 
-                var airportDirectory = sourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
-                var airport = airportDirectory.GetAirportData(this.newWayPointCode);
-                var waypoints = this.FlightPlan.WayPoints.ToList();
-                waypoints.Add(airport);
-                this.FlightPlan.WayPoints = waypoints;
+                this.FlightPlan.AddWaypoint(this.newWayPointCode);
             });
 
-            this.Clear = new RelayCommand(arg => this.FlightPlan.WayPoints = new ObservableCollection<IAirport>());
+            this.Clear = new RelayCommand(arg => this.FlightPlan.Waypoints.Clear());
 
             this.Save = new RelayCommand(async arg =>
             {
                 var fpDataSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
                 await fpDataSource.LoadAsync();
                 var flightPlans = fpDataSource.FlightPlans.ToList();
-                flightPlans.Add(this.FlightPlan);
+                flightPlans.Add(this.FlightPlan.FlightPlan);
                 fpDataSource.FlightPlans = flightPlans;
                 await fpDataSource.SaveAsync();
             });
         }
 
-        public FlightPlan FlightPlan
+        public FlightPlanViewModel FlightPlan
         {
             get { return this.flightPlan; }
-            set { this.SetProperty<FlightPlan>(ref this.flightPlan, value); }
+            set { this.SetProperty<FlightPlanViewModel>(ref this.flightPlan, value); }
         }
 
         public string NewWayPointCode

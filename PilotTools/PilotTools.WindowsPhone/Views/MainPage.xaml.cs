@@ -28,7 +28,6 @@ namespace PilotTools.Views
     public sealed partial class MainPage : Page
     {
         private NavigationHelper navigationHelper;
-        private AirportsPivotViewModel viewModel = new AirportsPivotViewModel(App.DataSourceManager);
 
         public MainPage()
         {
@@ -40,14 +39,39 @@ namespace PilotTools.Views
             
         }
 
-        private void lbFavorites_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListView).SelectedItem as AirportViewModel).Airport.ICAO);
+            switch ((LayoutRoot as Pivot).SelectedIndex)
+            {
+                case 0:
+                    this.Frame.Navigate(typeof(SearchAirport));
+                    break;
+                case 1:
+                    this.Frame.Navigate(typeof(EditFlightPlan));
+                    break;
+                default:
+                    break;
+            }
+
         }
 
-        private void lbAroundMe_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.AirportDetails), ((sender as ListView).SelectedItem as AirportViewModel).Airport.ICAO);
+            this.Frame.Navigate(typeof(Settings));
+        }
+
+        private void lvAirports_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+            vml.SelectedAirportViewModel = ((sender as ListView).SelectedItem as AirportViewModel);
+            this.Frame.Navigate(typeof(Views.AirportDetails));
+        }
+
+        private void lvFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+            vml.EditFlightPlanViewModel.FlightPlan = ((sender as ListView).SelectedItem as FlightPlanViewModel);
+            this.Frame.Navigate(typeof(Views.EditFlightPlan));
         }
 
         /// <summary>
@@ -56,15 +80,6 @@ namespace PilotTools.Views
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
-        public AirportsPivotViewModel ViewModel
-        {
-            get { return this.viewModel; }
         }
 
         /// <summary>
@@ -80,8 +95,11 @@ namespace PilotTools.Views
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.DataContext = this.ViewModel;
-            this.ViewModel.Load.Execute(null);
+            var vm = this.DataContext as AirportsPivotViewModel;
+            if (vm.Favorites == null)
+            {
+                vm.Load.Execute(null);
+            }
         }
 
         /// <summary>
@@ -122,31 +140,5 @@ namespace PilotTools.Views
         }
 
         #endregion
-
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
-        {
-            switch((LayoutRoot as Pivot).SelectedIndex)
-            {
-                case 0:
-                    this.Frame.Navigate(typeof(SearchAirport));
-                    break;
-                case 1:
-                    this.Frame.Navigate(typeof(EditFlightPlan));
-                    break;
-                default:
-                    break;
-            }
-            
-        }
-
-        private void lbFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void BtnSettings_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Settings));
-        }
     }
 }

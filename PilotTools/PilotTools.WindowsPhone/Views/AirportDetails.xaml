@@ -8,6 +8,7 @@
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     xmlns:ctrls="using:PilotTools.Controls"
     mc:Ignorable="d"
+    DataContext="{Binding SelectedAirportViewModel, Source={StaticResource ViewModelLocator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>

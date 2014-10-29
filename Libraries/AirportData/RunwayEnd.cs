@@ -14,5 +14,22 @@ namespace AirportData
         public BasicGeoposition Position { get; set; }
 
         public int DisplacedThreshold { get; set; }
+
+        public int Heading
+        {
+            get
+            {
+                int heading;
+                var gotHeading = int.TryParse(this.Identifier, out heading);
+
+                if(!gotHeading)
+                {
+                    heading = int.Parse(this.Identifier.Substring(0, this.Identifier.Length - 1));
+                }
+
+                heading *= 10;
+                return heading;
+            }
+        }
     }
 }

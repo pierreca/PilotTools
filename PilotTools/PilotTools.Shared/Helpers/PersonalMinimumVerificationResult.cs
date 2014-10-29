@@ -4,9 +4,10 @@ using System.Text;
 
 namespace PilotTools.Helpers
 {
-    public enum PersonalMinimumsResult
+    public enum PersonalMinimumVerificationResult
     {
         Pass,
+        Warning,
         Fail,
         Unknown
     }
