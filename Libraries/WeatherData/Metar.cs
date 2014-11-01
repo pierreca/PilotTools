@@ -13,6 +13,8 @@ namespace WeatherData
 
         public dynamic MetarObj { get; set; }
 
+        public DateTime TimePublished { get; set; }
+
         public Wind Wind { get; set; }
         public int Visibility { get; set; }
         public int Temperature { get; set; }

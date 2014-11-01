@@ -28,6 +28,12 @@ namespace PilotTools.Views
     public sealed partial class MainPage : Page
     {
         private NavigationHelper navigationHelper;
+        
+        private CommandBar favoritesCommandBar;
+        private CommandBar flightPlansCommandBar;
+
+        private AppBarButton deleteFavoritesButton;
+        private AppBarButton deleteFlightPlansButton;
 
         public MainPage()
         {
@@ -36,42 +42,8 @@ namespace PilotTools.Views
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            
-        }
 
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
-        {
-            switch ((LayoutRoot as Pivot).SelectedIndex)
-            {
-                case 0:
-                    this.Frame.Navigate(typeof(SearchAirport));
-                    break;
-                case 1:
-                    this.Frame.Navigate(typeof(EditFlightPlan));
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
-        private void BtnSettings_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Settings));
-        }
-
-        private void lvAirports_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
-            vml.SelectedAirportViewModel = ((sender as ListView).SelectedItem as AirportViewModel);
-            this.Frame.Navigate(typeof(Views.AirportDetails));
-        }
-
-        private void lvFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
-            vml.EditFlightPlanViewModel.FlightPlan = ((sender as ListView).SelectedItem as FlightPlanViewModel);
-            this.Frame.Navigate(typeof(Views.EditFlightPlan));
+            this.CreateCommandBars();
         }
 
         /// <summary>
@@ -96,10 +68,7 @@ namespace PilotTools.Views
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var vm = this.DataContext as AirportsPivotViewModel;
-            if (vm.Favorites == null)
-            {
-                vm.Load.Execute(null);
-            }
+            vm.Load.Execute(null);
         }
 
         /// <summary>
@@ -140,5 +109,191 @@ namespace PilotTools.Views
         }
 
         #endregion
+
+        #region Favorites
+
+        private async void BtnDeleteFavorite_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as AirportsPivotViewModel;
+            await vm.DeleteFavorites(this.lvFavorites.SelectedItems);
+        }
+
+        private void BtnSelectFavorites_Checked(object sender, RoutedEventArgs e)
+        {
+            this.lvFavorites.SelectionMode = ListViewSelectionMode.Multiple;
+            this.deleteFavoritesButton.Visibility = Visibility.Visible;
+        }
+
+        private void BtnSelectFavorites_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.lvFavorites.SelectionMode = ListViewSelectionMode.Single;
+            this.deleteFavoritesButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnAddFavorite_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SearchAirport));
+        }
+
+        private void lvAirports_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single)
+            {
+                var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+                vml.SelectedAirportViewModel = ((sender as ListView).SelectedItem as AirportViewModel);
+                this.Frame.Navigate(typeof(Views.AirportDetails));
+            }
+        }
+
+        #endregion Favorites
+
+        #region FlightPlans
+
+
+        private void BtnAddFlightPlan_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(EditFlightPlan));
+        }
+
+        private void lvFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single)
+            {
+                var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+                vml.EditFlightPlanViewModel.FlightPlan = ((sender as ListView).SelectedItem as FlightPlanViewModel);
+                this.Frame.Navigate(typeof(Views.EditFlightPlan));
+            }
+        }
+
+        private async void BtnDeleteFlightPlan_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as AirportsPivotViewModel;
+            await vm.DeleteFlightPlans(this.lvFlightPlans.SelectedItems);
+        }
+
+        private void BtnSelectFlightPlans_Checked(object sender, RoutedEventArgs e)
+        {
+            this.lvFlightPlans.SelectionMode = ListViewSelectionMode.Multiple;
+            this.deleteFlightPlansButton.Visibility = Visibility.Visible;
+        }
+
+        private void BtnSelectFlightPlans_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.lvFlightPlans.SelectionMode = ListViewSelectionMode.Single;
+            this.deleteFlightPlansButton.Visibility = Visibility.Collapsed;
+        }
+
+        #endregion FlightPlans
+
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Settings));
+        }
+
+        private void LayoutRoot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (((Pivot)sender).SelectedIndex)
+            {
+                case 0:
+                    this.BottomAppBar = this.favoritesCommandBar;
+                    break;
+                case 1:
+                    this.BottomAppBar = this.flightPlansCommandBar;
+                    break;
+            }
+        }
+
+        private void CreateCommandBars()
+        {
+            var locator = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+            var vm = locator.AirportsPivotViewModel;
+
+            this.favoritesCommandBar = new CommandBar();
+
+            var selectFavoriteButton = new AppBarToggleButton()
+                {
+                    Icon = new SymbolIcon(Symbol.List),
+                    Label = "select",
+                    Name = "BtnSelectFavorites"
+                };
+            selectFavoriteButton.Checked += this.BtnSelectFavorites_Checked;
+            selectFavoriteButton.Unchecked += this.BtnSelectFavorites_Unchecked;
+
+            var refreshFavoriteButton = new AppBarButton()
+            {
+                Icon = new SymbolIcon(Symbol.Refresh),
+                Label = "refresh",
+                Command = vm.RefreshFavorites
+            };
+
+            var addFavoriteButton = new AppBarButton()
+            {
+                Icon = new SymbolIcon(Symbol.Add),
+                Label = "add"
+            };
+            addFavoriteButton.Click += this.BtnAddFavorite_Click;
+
+            this.deleteFavoritesButton = new AppBarButton()
+            {
+                Icon = new SymbolIcon(Symbol.Delete),
+                Label = "delete",
+                Visibility = Visibility.Collapsed
+            };
+            this.deleteFavoritesButton.Click += this.BtnDeleteFavorite_Click;
+
+            var settingsButton = new AppBarButton()
+            {
+                Label = "settings"
+            };
+            settingsButton.Click += this.BtnSettings_Click;
+
+            this.favoritesCommandBar.PrimaryCommands.Add(selectFavoriteButton);
+            this.favoritesCommandBar.PrimaryCommands.Add(refreshFavoriteButton);
+            this.favoritesCommandBar.PrimaryCommands.Add(addFavoriteButton);
+            this.favoritesCommandBar.PrimaryCommands.Add(this.deleteFavoritesButton);
+
+            this.favoritesCommandBar.SecondaryCommands.Add(settingsButton);
+
+            this.flightPlansCommandBar = new CommandBar();
+
+            var selectFlightPlanButton = new AppBarToggleButton()
+            {
+                Icon = new SymbolIcon(Symbol.List),
+                Label = "select",
+                Name = "BtnSelectFlightPlan"
+            };
+            selectFlightPlanButton.Checked += this.BtnSelectFlightPlans_Checked;
+            selectFlightPlanButton.Unchecked += this.BtnSelectFlightPlans_Unchecked;
+
+            var refreshFlightPlanButton = new AppBarButton()
+             {
+                 Icon = new SymbolIcon(Symbol.Refresh),
+                 Label = "refresh"
+             };
+
+            var addFlightPlanButton = new AppBarButton()
+            {
+                Icon = new SymbolIcon(Symbol.Add),
+                Label = "add"
+            };
+            addFlightPlanButton.Click += this.BtnAddFlightPlan_Click;
+
+            this.deleteFlightPlansButton = new AppBarButton()
+            {
+                Icon = new SymbolIcon(Symbol.Delete),
+                Label = "delete",
+                Visibility = Visibility.Collapsed
+            };
+            this.deleteFlightPlansButton.Click += this.BtnDeleteFlightPlan_Click;
+
+
+            this.flightPlansCommandBar.PrimaryCommands.Add(selectFlightPlanButton);
+            this.flightPlansCommandBar.PrimaryCommands.Add(refreshFlightPlanButton);
+            this.flightPlansCommandBar.PrimaryCommands.Add(addFlightPlanButton);
+            this.flightPlansCommandBar.PrimaryCommands.Add(this.deleteFlightPlansButton);
+
+            //this.flightPlansCommandBar.SecondaryCommands.Add(settingsButton);
+        }
     }
 }

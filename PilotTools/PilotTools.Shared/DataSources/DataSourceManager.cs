@@ -4,6 +4,7 @@ using System.Text;
 
 using FlightPlanning;
 using PilotTools.Common;
+using WeatherData;
 
 namespace PilotTools.DataSources
 {
@@ -19,6 +20,8 @@ namespace PilotTools.DataSources
 
             var flightPlans = new FlightPlanSource(airports);
             sources.Add(DataSourceContentType.FlightPlans, flightPlans);
+
+            sources.Add(DataSourceContentType.Metar, new MetarSource());
 
             this.DataSources = sources; 
         }

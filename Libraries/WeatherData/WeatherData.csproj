@@ -42,7 +42,7 @@
     <Compile Include="FlightRules.cs" />
     <Compile Include="IMetarDecoder.cs" />
     <Compile Include="Metar.cs" />
-    <Compile Include="MetarDecoder.cs" />
+    <Compile Include="MetarSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wind.cs" />
   </ItemGroup>
@@ -70,6 +70,10 @@
     <ProjectReference Include="..\..\..\..\..\Desktop\PilotTools\Source Librairies\MetarDecoderSolution\PCL\ENG.WMOCodes\ENG.WMOCodes.csproj">
       <Project>{547ef9f2-e2c6-4c0b-af96-73a81d804022}</Project>
       <Name>ENG.WMOCodes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PilotTools.Common\PilotTools.Common.csproj">
+      <Project>{bb3013bb-c2b6-476d-83db-f4d967b13c74}</Project>
+      <Name>PilotTools.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

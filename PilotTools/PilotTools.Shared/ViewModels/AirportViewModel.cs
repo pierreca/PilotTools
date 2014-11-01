@@ -68,27 +68,42 @@ namespace PilotTools.ViewModels
 
         public RelayCommand AddFavorite { get; set; }
 
-        public async Task LoadAirportDataAsync(string airportCode)
+        public async Task LoadAirportWeatherAsync()
         {
+            await this.LoadAirportWeatherAsync(false);
+        }
+
+        public async Task LoadAirportWeatherAsync(bool forceRefresh)
+        {
+            if(this.Airport == null)
+            {
+                throw new InvalidOperationException("Can't load weather for an airport that hasn't been loaded");
+            }
+            
             try
             {
+                var metarSource = App.DataSourceManager.DataSources[DataSourceContentType.Metar] as MetarSource;
+                this.Metar = await metarSource.GetMetarAsync(this.Airport.ICAO, forceRefresh);
+                this.HasMetar = true;
+            }
+            catch (Exception)
+            {
+                this.HasMetar = false;
+            }
+        }
+
+        public async Task LoadAirportDataAsync(string airportCode)
+        {
                 var airportDirectory = this.SourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
                 this.Airport = airportDirectory.GetAirportData(airportCode);
                 this.MapCenter = new Geopoint(this.Airport.Position);
                 
-                if (SystemHelper.HasNetwork)
+                if (SystemHelper.HasNetwork && airportCode.Length == 4)
                 {
-                    var decoder = new WeatherData.MetarDecoder();
-                    this.Metar = await decoder.GetMetarAsync(airportCode);
-                    this.HasMetar = true;
+                    await this.LoadAirportWeatherAsync();
                 }
 
                 this.PersonalMinimumResults = await this.CheckPersonalMinimums();
-            }
-            catch(Exception)
-            {
-                this.HasMetar = false;
-            }
         }
 
         public async Task<Dictionary<string, PersonalMinimumVerificationResult>> CheckPersonalMinimums()
@@ -101,21 +116,6 @@ namespace PilotTools.ViewModels
 
 
             var minimums = await PersonalMinimums.LoadAsync();
-
-            results["Visibility"] = this.Metar.Visibility.IsOver(minimums.Visibility);
-
-            if(this.Metar.Clouds.Any(cl => cl.IsCeiling))
-            {
-                var ceiling = this.Metar.Clouds.Where(cl => cl.IsCeiling)
-                                               .OrderBy(cl => cl.Altitude)
-                                               .First();
-
-                results["Ceiling"] = ceiling.Altitude.IsOver(minimums.Ceiling);
-            }
-            else
-            {
-                results["Ceiling"] = PersonalMinimumVerificationResult.Pass;
-            }
 
             var passRunway = this.Airport.Runways.Where(rwy => rwy.Length.IsOver(minimums.RunwayLength) == PersonalMinimumVerificationResult.Pass
                                                                && rwy.Width.IsOver(minimums.RunwayWidth) == PersonalMinimumVerificationResult.Pass
@@ -138,6 +138,21 @@ namespace PilotTools.ViewModels
 
             if (this.HasMetar)
             {
+                results["Visibility"] = this.Metar.Visibility.IsOver(minimums.Visibility);
+
+                if (this.Metar.Clouds.Any(cl => cl.IsCeiling))
+                {
+                    var ceiling = this.Metar.Clouds.Where(cl => cl.IsCeiling)
+                                                   .OrderBy(cl => cl.Altitude)
+                                                   .First();
+
+                    results["Ceiling"] = ceiling.Altitude.IsOver(minimums.Ceiling);
+                }
+                else
+                {
+                    results["Ceiling"] = PersonalMinimumVerificationResult.Pass;
+                }
+
                 foreach (var rwy in passRunway)
                 {
                     var windComponents = CrossWindComponents.CreateFromMetarData(this.Metar.Wind.Direction, this.Metar.Wind.Speed, rwy.End1.Heading);

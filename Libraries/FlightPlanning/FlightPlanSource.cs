@@ -86,9 +86,9 @@ namespace FlightPlanning
         public async Task SaveAsync()
         {
             var roamingFolder = Windows.Storage.ApplicationData.Current.RoamingFolder;
-            var favsFile = await roamingFolder.CreateFileAsync(FlightPlanSource.FileName, CreationCollisionOption.ReplaceExisting);
+            var fpFile = await roamingFolder.CreateFileAsync(FlightPlanSource.FileName, CreationCollisionOption.ReplaceExisting);
 
-            using (var stream = await favsFile.OpenStreamForWriteAsync())
+            using (var stream = await fpFile.OpenStreamForWriteAsync())
             {
                 using (var writer = new StreamWriter(stream))
                 {

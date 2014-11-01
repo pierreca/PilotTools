@@ -8,6 +8,6 @@ namespace PilotTools.Common
     {
         Airports,
         FlightPlans,
-        Weather,
+        Metar,
     }
 }

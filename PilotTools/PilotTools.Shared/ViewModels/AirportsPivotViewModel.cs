@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
 namespace PilotTools.ViewModels
@@ -33,6 +34,14 @@ namespace PilotTools.ViewModels
                 this.LoadFavorites();
                 this.LoadAroundMe();
                 this.LoadFlightPlans();
+            });
+
+            this.RefreshFavorites = new RelayCommand(async arg =>
+            {
+                foreach (var avm in this.favorites)
+                {
+                    await avm.LoadAirportWeatherAsync(true);
+                }
             });
         }
 
@@ -73,6 +82,8 @@ namespace PilotTools.ViewModels
         }
 
         public RelayCommand Load { get; set; }
+
+        public RelayCommand RefreshFavorites { get; set; }
 
         private async void LoadFavorites()
         {
@@ -119,6 +130,41 @@ namespace PilotTools.ViewModels
             {
                 this.FlightPlans.Add(await FlightPlanViewModel.CreateAsync(fp));
             }
+        }
+
+        public async Task DeleteFavorites(IList<object> list)
+        {
+            // we need an intermediate list because as soon as we remove from list, the COMObject cannot be reevaluated.
+            var toRemove = (from item in list
+                            let avm = item as AirportViewModel
+                            select avm).ToList();
+
+            foreach (var airport in toRemove)
+            {
+                this.Favorites.Remove(airport as AirportViewModel);
+            }
+
+            var newFavs = this.Favorites.Select<AirportViewModel, string>(avm => avm.Airport.ICAO);
+            await Helpers.Favorites.SaveAsync(newFavs);
+        }
+
+        public async Task DeleteFlightPlans(IList<object> list)
+        {
+            // we need an intermediate list because as soon as we remove from list, the COMObject cannot be reevaluated.
+            var toRemove = (from item in list
+                            let fpvm = item as FlightPlanViewModel
+                            select fpvm).ToList();
+
+            foreach (var flightplan in toRemove)
+            {
+                this.FlightPlans.Remove(flightplan as FlightPlanViewModel);
+            }
+
+            var fpSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
+            fpSource.FlightPlans = from fpvm in this.FlightPlans
+                                   select fpvm.FlightPlan;
+
+            await fpSource.SaveAsync();
         }
     }
 }

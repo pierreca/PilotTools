@@ -9,8 +9,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
     DataContext="{Binding AirportsPivotViewModel, Source={StaticResource ViewModelLocator}}">
     
-
-    <Pivot x:Name="LayoutRoot" Title="PILOT TOOLS - AIRPORTS">
+    <Pivot x:Name="LayoutRoot" 
+           Title="PILOT TOOLS - AIRPORTS"
+           SelectionChanged="LayoutRoot_SelectionChanged">
         <PivotItem Header="favorites">
             <Grid>
                 <Grid.RowDefinitions>
@@ -44,6 +45,7 @@
                       ItemContainerStyle="{StaticResource FlightPlanContainerStyle}"
                       ItemTemplate="{StaticResource FlightPlanDataTemplate}"
                       SelectionChanged="lvFlightPlans_SelectionChanged"
+                      SelectionMode="Single"
                       FontSize="36" />
         </PivotItem>
         <PivotItem Header="around me">
@@ -56,19 +58,4 @@
                       FontSize="36" />
         </PivotItem>
     </Pivot>
-    <Page.BottomAppBar>
-        <CommandBar>
-            <CommandBar.PrimaryCommands>
-                <AppBarButton x:Name="BtnSettings"
-                              Click="BtnSettings_Click"
-                              Icon="Setting"
-                              Label="settings" />
-                
-                <AppBarButton x:Name="BtnAdd" 
-                              Click="BtnAdd_Click"
-                              Icon="Add" 
-                              Label="add" />
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
-    </Page.BottomAppBar>
 </Page>
