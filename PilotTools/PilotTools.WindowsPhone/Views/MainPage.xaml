@@ -29,7 +29,6 @@
                 <ListView x:Name="lvFavorites" 
                           Grid.Row="1"
                           Background="Transparent"
-                          Foreground="White"
                           ItemsSource="{Binding Favorites}"
                           ItemContainerStyle="{StaticResource AirportContainerStyle}"
                           ItemTemplate="{StaticResource AirportItemTemplate}"
@@ -40,7 +39,6 @@
         <PivotItem Header="flight plans">
             <ListView x:Name="lvFlightPlans"
                       Background="Transparent"
-                      Foreground="White"
                       ItemsSource="{Binding FlightPlans}"
                       ItemContainerStyle="{StaticResource FlightPlanContainerStyle}"
                       ItemTemplate="{StaticResource FlightPlanDataTemplate}"
@@ -53,7 +51,6 @@
                       Background="Transparent"
                       ItemsSource="{Binding AroundMe}"
                       DisplayMemberPath="ICAO"
-                      Foreground="White"
                       SelectionChanged="lvAirports_SelectionChanged"
                       FontSize="36" />
         </PivotItem>

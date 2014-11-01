@@ -8,7 +8,7 @@
     <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     <conv:FlightRulesToBrushConverter x:Key="FlightRulesToBrushConverter" />
     <conv:PersonalMinimumsResultToBrushConverter x:Key="PersonalMinimumsResultToBrushConverter" />
-
+    
     <DataTemplate x:Key="AirportItemTemplate">
         <Grid>
             <Grid.RowDefinitions>
@@ -17,9 +17,8 @@
             </Grid.RowDefinitions>
 
             <Border Grid.RowSpan="2"
-                    BorderBrush="White"
-                    BorderThickness="0,1"
-                    Opacity=".5"/>
+                    BorderBrush="{ThemeResource SystemColorControlAccentBrush}"
+                    BorderThickness="0,1" />
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -42,6 +41,7 @@
                 <Border Grid.Column="1"
                         Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
                     <TextBlock Text="{Binding Metar.ApplicableFlightRules}"
+                               Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="20" />
@@ -124,7 +124,6 @@
                 
                 <ListView Grid.Row="3"
                           Grid.Column="1"
-                          Foreground="White"
                           IsHitTestVisible="False"
                           ItemsSource="{Binding Metar.Clouds}">
                     <ListView.ItemTemplate>
@@ -188,9 +187,14 @@
         <Setter Property="FontSize" Value="20" />
     </Style>
 
+
+    <SolidColorBrush x:Key="BlackBrush"
+                     Color="Black" />
+    
     <DataTemplate x:Key="WaypointDataTemplate">
-        <Border Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
+        <Border Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}, FallbackValue={StaticResource BlackBrush}}">
             <TextBlock Text="{Binding Airport.ICAO}"
+                       Foreground="White"
                        FontSize="22"
                        HorizontalAlignment="Center"
                        Margin="5,0" 

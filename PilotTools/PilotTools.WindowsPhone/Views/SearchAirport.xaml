@@ -62,7 +62,6 @@
             <ListView x:Name="lbResults" 
                       Grid.Row="2"
                       Background="Transparent"
-                      Foreground="White"
                       ItemsSource="{Binding Results}"
                       ItemContainerStyle="{StaticResource AirportContainerStyle}"
                       ItemTemplate="{StaticResource AirportItemTemplate}" 
