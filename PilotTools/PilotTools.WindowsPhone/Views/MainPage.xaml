@@ -46,11 +46,12 @@
                       SelectionMode="Single"
                       FontSize="36" />
         </PivotItem>
-        <PivotItem Header="around me">
+        <PivotItem Header="nearest">
             <ListView x:Name="lbAroundMe" 
                       Background="Transparent"
-                      ItemsSource="{Binding AroundMe}"
-                      DisplayMemberPath="ICAO"
+                      ItemsSource="{Binding Nearest}"
+                      ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                      ItemTemplate="{StaticResource AirportItemTemplate}"
                       SelectionChanged="lvAirports_SelectionChanged"
                       FontSize="36" />
         </PivotItem>

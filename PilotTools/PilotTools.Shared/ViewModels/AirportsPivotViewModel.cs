@@ -19,7 +19,7 @@ namespace PilotTools.ViewModels
         private int aroundMeRadius;
 
         private ObservableCollection<AirportViewModel> favorites;
-        private ObservableCollection<IAirport> aroundMe;
+        private ObservableCollection<AirportViewModel> nearest;
         private ObservableCollection<FlightPlanViewModel> flightPlans;
         private bool hasNetwork;
         private string searchCode;
@@ -27,7 +27,7 @@ namespace PilotTools.ViewModels
         public AirportsPivotViewModel(IDataSourceManager sourceManager)
             : base (sourceManager)
         {
-            this.aroundMeRadius = 50;
+            this.aroundMeRadius = 20;
 
             this.Load = new RelayCommand(arg =>
             {
@@ -45,10 +45,10 @@ namespace PilotTools.ViewModels
             });
         }
 
-        public ObservableCollection<IAirport> AroundMe
+        public ObservableCollection<AirportViewModel> Nearest
         {
-            get { return this.aroundMe; }
-            set { this.SetProperty<ObservableCollection<IAirport>>(ref this.aroundMe, value); }
+            get { return this.nearest; }
+            set { this.SetProperty<ObservableCollection<AirportViewModel>>(ref this.nearest, value); }
         }
 
         public int AroundMeRadius
@@ -116,8 +116,16 @@ namespace PilotTools.ViewModels
         {
             var airportsDB = this.SourceManager.DataSources[DataSourceContentType.Airports] as IAirportDirectory;
             var myPosition = await Helpers.Location.GetPosition();
+            var airportsNearMe = await airportsDB.GetAirportsAroundAsync(myPosition, this.AroundMeRadius);
 
-            this.AroundMe = new ObservableCollection<IAirport>(await airportsDB.GetAirportsAroundAsync(myPosition, this.AroundMeRadius));
+            this.Nearest = new ObservableCollection<AirportViewModel>();
+            foreach (var airport in airportsNearMe)
+            {
+                var vm = new AirportViewModel(this.SourceManager);
+                this.HasNetwork = SystemHelper.HasNetwork;
+                await vm.LoadAirportDataAsync(airport.ICAO);
+                this.Nearest.Add(vm);
+            }
         }
 
         private async void LoadFlightPlans()

@@ -11,6 +11,7 @@ using AviationMath;
 using WeatherData;
 using Windows.Devices.Geolocation;
 using PilotTools.Common;
+using System.Text.RegularExpressions;
 
 namespace PilotTools.ViewModels
 {
@@ -98,7 +99,7 @@ namespace PilotTools.ViewModels
                 this.Airport = airportDirectory.GetAirportData(airportCode);
                 this.MapCenter = new Geopoint(this.Airport.Position);
                 
-                if (SystemHelper.HasNetwork && airportCode.Length == 4)
+                if (SystemHelper.HasNetwork && airportCode.Length == 4 && Regex.IsMatch(airportCode, @"^[A-Z]+$"))
                 {
                     await this.LoadAirportWeatherAsync();
                 }

@@ -137,7 +137,8 @@ namespace PilotTools.Views
 
         private void lvAirports_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single)
+            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single
+                && (sender as ListView).SelectedIndex != -1)
             {
                 var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
                 vml.SelectedAirportViewModel = ((sender as ListView).SelectedItem as AirportViewModel);
@@ -157,7 +158,8 @@ namespace PilotTools.Views
 
         private void lvFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single)
+            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single
+                && (sender as ListView).SelectedIndex != -1)
             {
                 var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
                 vml.EditFlightPlanViewModel.FlightPlan = ((sender as ListView).SelectedItem as FlightPlanViewModel);

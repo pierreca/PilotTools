@@ -113,9 +113,10 @@
                 <Border Grid.ColumnSpan="2"
                         Background="{Binding Metar.ApplicableFlightRules, Converter={StaticResource FlightRulesToBrushConverter}}">
                     <TextBlock Text="{Binding Metar.ApplicableFlightRules}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="28" />
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="28" />
                 </Border>
                 
                 <TextBlock Grid.Row="1"
@@ -166,8 +167,6 @@
 
             <ListView Grid.Row="4"
                             Grid.Column="1"
-                            Background="Black"
-                            Foreground="White"
                             IsHitTestVisible="False"
                             ItemsSource="{Binding Metar.Clouds}">
                 <ListView.ItemTemplate>
