@@ -92,11 +92,39 @@ namespace PilotTools.Views
             this.navigationHelper.OnNavigatedTo(e);
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
         }
 
         #endregion
+
+        private void lvWaypoints_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single
+                && (sender as ListView).SelectedIndex != -1)
+            {
+                var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+                vml.SelectedAirportViewModel = ((sender as ListView).SelectedItem as AirportViewModel);
+                this.Frame.Navigate(typeof(Views.AirportDetails));
+            }
+        }
+
+        private void BtnSelect_Checked(object sender, RoutedEventArgs e)
+        {
+            this.lvWaypoints.SelectionMode = ListViewSelectionMode.Multiple;
+        }
+
+        private void BtnSelect_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.lvWaypoints.SelectionMode = ListViewSelectionMode.Single;
+        }
+
+
+        private void BtnDeleteWaypoints_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as EditFlightPlanViewModel;
+            vm.DeleteWaypoints(this.lvWaypoints.SelectedItems);
+        }
     }
 }

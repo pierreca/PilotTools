@@ -47,11 +47,10 @@ namespace PilotTools.ViewModels
             return fpvm;
         }
 
-        public async void AddWaypoint(string ICAO)
+        public async Task AddWaypoint(string ICAO)
         {
             var avm = new AirportViewModel(this.SourceManager);
             await avm.LoadAirportDataAsync(ICAO);
-
             this.FlightPlan.AddWaypoint(avm.Airport);
             await this.LoadWaypoints();
         }

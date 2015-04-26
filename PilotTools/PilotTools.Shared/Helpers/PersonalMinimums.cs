@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PilotTools.Common;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,7 @@ using Windows.Storage;
 namespace PilotTools.Helpers
 {
     [DataContract]
-    public class PersonalMinimums
+    public class PersonalMinimums : IDataSource
     {
         private const string PersonalMinimumsFile = "minimums.txt";
 
@@ -26,11 +27,10 @@ namespace PilotTools.Helpers
         [DataMember]
         public int RunwayWidth { get; set; }
 
-        public static async Task<PersonalMinimums> LoadAsync()
+        public async Task LoadAsync()
         {
             var roamingFolder = Windows.Storage.ApplicationData.Current.RoamingFolder;
             var deleteFile = false;
-            PersonalMinimums result = new PersonalMinimums();
 
             try
             {
@@ -39,7 +39,13 @@ namespace PilotTools.Helpers
                 using (var stream = await file.OpenStreamForReadAsync())
                 {
                     var serializer = new DataContractSerializer(typeof(PersonalMinimums));
-                    result = serializer.ReadObject(stream) as PersonalMinimums;                
+                    var mins = serializer.ReadObject(stream) as PersonalMinimums;
+
+                    this.Ceiling = mins.Ceiling;
+                    this.Crosswind = mins.Crosswind;
+                    this.RunwayLength = mins.RunwayLength;
+                    this.RunwayWidth = mins.RunwayWidth;
+                    this.Visibility = mins.Visibility;
                 }
             }
             catch (FileNotFoundException)
@@ -64,8 +70,6 @@ namespace PilotTools.Helpers
                     Debug.WriteLine("Could not delete Minimums file: " + ex.Message);
                 }
             }
-
-            return result;
         }
 
         public async Task SaveAsync()
@@ -79,5 +83,24 @@ namespace PilotTools.Helpers
                 serializer.WriteObject(stream, this);
             }
         }
+
+        #region IDataSource Implementation
+
+        public string Name
+        {
+            get { return "Personal Minimums"; }
+        }
+
+        public DataSourceOrigin Type
+        {
+            get { return DataSourceOrigin.LocalOnly; }
+        }
+
+        public Task DownloadAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion IDataSource Implementation
     }
 }

@@ -9,5 +9,6 @@ namespace PilotTools.Common
         Airports,
         FlightPlans,
         Metar,
+        PersonalMinimums,
     }
 }

@@ -116,7 +116,7 @@ namespace PilotTools.ViewModels
             results.Add("Crosswind", PersonalMinimumVerificationResult.Unknown);
 
 
-            var minimums = await PersonalMinimums.LoadAsync();
+            var minimums = this.SourceManager.DataSources[DataSourceContentType.PersonalMinimums] as PersonalMinimums;
 
             var passRunway = this.Airport.Runways.Where(rwy => rwy.Length.IsOver(minimums.RunwayLength) == PersonalMinimumVerificationResult.Pass
                                                                && rwy.Width.IsOver(minimums.RunwayWidth) == PersonalMinimumVerificationResult.Pass

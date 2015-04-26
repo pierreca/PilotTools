@@ -174,5 +174,13 @@ namespace PilotTools.ViewModels
 
             await fpSource.SaveAsync();
         }
+
+        public async Task SaveFlightPlans()
+        {
+            var flightPlans = this.FlightPlans.Select(fp => fp.FlightPlan);
+            var fpSource = this.SourceManager.DataSources[DataSourceContentType.FlightPlans] as FlightPlanSource;
+            fpSource.FlightPlans = flightPlans;
+            await fpSource.SaveAsync();
+        }
     }
 }

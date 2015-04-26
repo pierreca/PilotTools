@@ -39,17 +39,25 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             
+            <Border Grid.Row="1"
+                    Margin="20,6,8,6"
+                    BorderThickness="6"
+                    BorderBrush="Red"
+                    Visibility="{Binding WaypointNotFound, Converter={StaticResource BoolToVisibleConverter}}"/>
+            
             <TextBox x:Name="tbSearch"
                      Grid.Row="1"
                      Margin="24,0,12,0"
                      Text="{Binding NewWayPointCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding ElementName=BtnAdd, Path=IsChecked, Converter={StaticResource BoolToVisibleConverter}}"
                      VerticalAlignment="Center" />
 
             <Button x:Name="BtnAddWaypoint"
                     Grid.Row="1"
                     Grid.Column="1"
                     Command="{Binding AddWaypoint}"
-                    Content="Add Waypoint"
+                    Visibility="{Binding ElementName=BtnAdd, Path=IsChecked, Converter={StaticResource BoolToVisibleConverter}}"
+                    Content="Add Airport"
                     HorizontalAlignment="Right"  
                     Margin="0,0,24,0"/>
 
@@ -58,18 +66,26 @@
                       ItemsSource="{Binding FlightPlan.Waypoints}"
                       ItemTemplate="{StaticResource AirportItemTemplate}"
                       ItemContainerStyle="{StaticResource AirportContainerStyle}"
+                      SelectionChanged="lvWaypoints_SelectionChanged"
                       Margin="24,0" />
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
-                <AppBarButton x:Name="BtnSave" 
-                              Command="{Binding Save}"
-                              Icon="Save" />
-                <AppBarButton x:Name="Clear"
-                              Command="{Binding Clear}"
-                              Icon="Clear" />
+                <AppBarToggleButton x:Name="BtnSelect"
+                                    Icon="List"
+                                    Label="select"
+                                    Checked="BtnSelect_Checked"
+                                    Unchecked="BtnSelect_Unchecked"/>
+                <AppBarToggleButton x:Name="BtnAdd" 
+                                    Icon="add"
+                                    Label="Add"/>
+                <AppBarButton x:Name="BtnDelete"
+                              Visibility="{Binding ElementName=BtnSelect, Path=IsChecked, Converter={StaticResource BoolToVisibleConverter}}"
+                              Click="BtnDeleteWaypoints_Click"
+                              Icon="Delete"
+                              Label="delete"/>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

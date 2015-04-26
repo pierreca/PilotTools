@@ -153,7 +153,10 @@ namespace PilotTools.Views
 
         private void BtnAddFlightPlan_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(EditFlightPlan));
+            var newFlightPlan = new FlightPlanViewModel(App.DataSourceManager);
+            var vm = this.DataContext as AirportsPivotViewModel;
+            vm.FlightPlans.Add(newFlightPlan);
+            this.SelectFlightPlanAndEdit(newFlightPlan);
         }
 
         private void lvFlightPlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -161,10 +164,15 @@ namespace PilotTools.Views
             if ((sender as ListView).SelectionMode == ListViewSelectionMode.Single
                 && (sender as ListView).SelectedIndex != -1)
             {
-                var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
-                vml.EditFlightPlanViewModel.FlightPlan = ((sender as ListView).SelectedItem as FlightPlanViewModel);
-                this.Frame.Navigate(typeof(Views.EditFlightPlan));
+                this.SelectFlightPlanAndEdit(((sender as ListView).SelectedItem as FlightPlanViewModel));
             }
+        }
+
+        private void SelectFlightPlanAndEdit(FlightPlanViewModel flightPlan)
+        {
+            var vml = App.Current.Resources["ViewModelLocator"] as ViewModelLocator;
+            vml.EditFlightPlanViewModel.FlightPlan = flightPlan;
+            this.Frame.Navigate(typeof(Views.EditFlightPlan));
         }
 
         private async void BtnDeleteFlightPlan_Click(object sender, RoutedEventArgs e)

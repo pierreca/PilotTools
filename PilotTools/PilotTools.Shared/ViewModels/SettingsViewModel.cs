@@ -34,7 +34,7 @@ namespace PilotTools.ViewModels
         public async Task LoadAsync()
         {
             this.DataSources = new ObservableCollection<DataSourceViewModel>(App.DataSourceManager.DataSources.Select(s => new DataSourceViewModel(App.DataSourceManager, s.Key)));
-            this.Minimums = await PersonalMinimums.LoadAsync();
+            this.Minimums = this.SourceManager.DataSources[Common.DataSourceContentType.PersonalMinimums] as PersonalMinimums;
         }
 
         public async Task SaveSettings()
